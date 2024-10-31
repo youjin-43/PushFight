@@ -3,54 +3,42 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 7;
+    [Header("Move")]
+    //[SerializeField] float moveSpeed = 7f;// for 좌우이동 -> 근데 안씀~
+    [SerializeField] float jumpPower = 20f;
+    [SerializeField] int jumpMaxCnt = 2;
+    [SerializeField] int currentJumpCnt;
+    
 
-    //control
-    InputAction moveAction;
-    InputAction attackAction;
-    InputAction jumpAction;
-
-    [SerializeField] CharacterController characterController;
-    [SerializeField] Animator animator;
+    Animator animator;
 
     private void Start()
     {
-        InputActionAsset inputActions = GetComponent<PlayerInput>().actions;
-        moveAction = inputActions.FindAction("Move");
-        //attackAction = inputActions.FindAction("Attack");
-        jumpAction = inputActions.FindAction("Jump");
-
-        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
+        currentJumpCnt = 0;
     }
 
     private void Update()
     {
-        Vector2 moveVector = moveAction.ReadValue<Vector2>();
-        Vector3 move = new Vector3(-moveVector.x, 0, 0);
-        move = move * moveSpeed * Time.deltaTime;
-        characterController.Move(move);
 
-        //if (attackAction.WasPressedThisFrame() == true)
-        //{
-        //    Attack();
-        //}else
+        //좌우 이동 -> 사실 필요없는뎅;
+        //float h = Input.GetAxis("Horizontal");
+        //transform.Translate((new Vector3(h, 0, 0) * moveSpeed) * Time.deltaTime);
 
-        if (jumpAction.WasPressedThisFrame() == true)
+        if (Input.GetKeyDown(KeyCode.Space)) Jump(); //점프
+
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
-            {
-                DoubleJump();
-            }
-            else
-            {
-                Jump();
-            }
+            Debug.Log("Landed");
+            currentJumpCnt = 0;
+            animator.SetTrigger("Land");
 
-            
         }
-
     }
 
 
@@ -62,8 +50,13 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        Debug.Log("Jump");
-        animator.SetTrigger("Jump");
+        //Debug.Log("Space is pushed");
+        if (currentJumpCnt < jumpMaxCnt)
+        {
+            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            currentJumpCnt++;
+            animator.SetTrigger("Jump");
+        }
     }
 
     private void DoubleJump()
@@ -72,7 +65,7 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("DoubleJump");
     }
 
-        private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Item")
         {
@@ -82,4 +75,5 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
 }
