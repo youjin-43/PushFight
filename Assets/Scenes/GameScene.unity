@@ -1274,13 +1274,12 @@ MonoBehaviour:
   downLimit: 7
   spawnRate: 10
   spawnTime: 3
+  spawnPosZ: -180
   EnergeItemCnt: 15
   EnergeItemPool: {fileID: 383077153}
   EnergePrefab: {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}
   ItemPrefabs:
   - {fileID: 894215939931545293, guid: 6e44f609ac12243a197d6341ac70cb3d, type: 3}
-  - {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}
-  - {fileID: 7535266119704928820, guid: 40e5a05a4fbc24f0686db284939d8eb3, type: 3}
   - {fileID: 8816352745581931424, guid: 5bc9094bd48b1445cb64737da8864344, type: 3}
   ItemPool: {fileID: 916355197}
   ItemObjs: []

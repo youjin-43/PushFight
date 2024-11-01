@@ -14,7 +14,7 @@ public class PlayerInfo : MonoBehaviour
 
     private void Start()
     {
-        EnergyText.text = energeCnt.ToString();
+        EnergyText.text = energeCnt.ToString(); 
         AttackText.text = attackCnt.ToString();
     }
 
