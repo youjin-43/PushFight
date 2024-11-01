@@ -32,29 +32,33 @@ public class MapManager : MonoBehaviour
     GameObject[] GroundTiles;
     int tileCnt = 6;
 
-    //아이템 스폰 
-    [Header("SpawnLimits")]
-    public float spawnRate = 10f;
-    float startPoint = -50f;
-
+    //아이템 스폰
+    [Header("Spawn - Limits")]
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
 
+    [Header("Spawn - Energy")]
+    public float spawnRate = 10f;
+    float startPoint = -50f;
+
+    [Header("Spawn - UpgradeItem")]
+    [SerializeField] float spawnTime = 3f; //3초마다 생성 
+    float timer = 0;
+
+
     [Space(10f)]
-    [Header("ObjectPool")]
+    [Header("ObjectPool - Energy")]
+    public int EnergeItemCnt = 15;
     [SerializeField] GameObject EnergeItemPool;
     [SerializeField] GameObject EnergePrefab;
-    public int EnergeItemCnt = 15;
-    
     List<GameObject> energeObjs;
 
-    [SerializeField] GameObject AttackItemPool;
-    [SerializeField] int AttackItemCnt = 10;
-    [SerializeField] GameObject AttackPrefab;
-    List<GameObject> AttackItemObjs;
-
-    
+    [Space(10f)]
+    [Header("ObjectPool - Item")]
+    public GameObject[] ItemPrefabs;
+    [SerializeField] GameObject ItemPool;
+    [SerializeField] List<GameObject> ItemObjs;
 
     void Start()
     {
@@ -62,7 +66,7 @@ public class MapManager : MonoBehaviour
         GroundTiles = new GameObject[tileCnt];
         for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i%3], new Vector3(0, 0, -100*i), Quaternion.identity);
 
-        //아이템 풀 instantiate
+        // 에너지 오브젝트 풀 생성하고 맵에 배치
         energeObjs = new List<GameObject>();
         for (int i = 0; i < EnergeItemCnt; i++)
         {
@@ -71,7 +75,45 @@ public class MapManager : MonoBehaviour
             go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint + -i * spawnRate);
         }
 
+        //다른 아이템 오브젝트 풀 생성
+        for (int i = 0; i < ItemPrefabs.Length; i++)
+        {
+            GameObject go = Instantiate(ItemPrefabs[i], ItemPool.transform);
+            ItemObjs.Add(go);
+            go.SetActive(false);
+        }
+
+        //업그레이트 아이템 스폰을 위한 변수 초기화
+        timer = 0;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S)) {
+            Shuffle();
+        }
+    }
+
+
+    //아이템 리스트 중 랜덤으로 2개 스폰 
+    void SpawnItem()
+    {
+
+    }
+
+
+    void Shuffle()
+    {
+        int randomIdx;
+        for (int i=0;i< ItemObjs.Count; i++)
+        {
+            randomIdx = Random.Range(0, ItemObjs.Count);
+
+            //swap
+            GameObject itme_1 = ItemObjs[i]; GameObject itme_2 = ItemObjs[randomIdx];
+            (itme_1, itme_2) = (itme_2, itme_1);
+            ItemObjs[i] = itme_1; ItemObjs[randomIdx] = itme_2;
+        }
+    }
 
 }

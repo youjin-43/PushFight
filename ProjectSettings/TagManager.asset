@@ -4,9 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Item
   - Ground
   - Energy
+  - UpgradeItem
+  - AttackItem
   layers:
   - Default
   - TransparentFX

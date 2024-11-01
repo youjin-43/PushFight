@@ -22,12 +22,14 @@ public class PlayerInfo : MonoBehaviour
     {
         if (other.gameObject.tag == "Energy")
         {
-            Debug.Log("아이템과 충돌");
-            other.gameObject.GetComponent<ItemScroll>().GoStartPos(); // 스폰위치로 이동
+            Debug.Log("에너지와 충돌");
+            other.gameObject.GetComponent<Energy>().GoStartPos(); // 스폰위치로 이동
             energeCnt++;
             EnergyText.text = energeCnt.ToString();
             
-
+        }else if (other.gameObject.tag == "UpgradeItem")
+        {
+            other.gameObject.SetActive(false);
         }
 
     }

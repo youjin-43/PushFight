@@ -26,8 +26,14 @@ public class PlayerController : MonoBehaviour
         //float h = Input.GetAxis("Horizontal");
         //transform.Translate((new Vector3(h, 0, 0) * moveSpeed) * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Space)) Jump(); //점프
+        //점프
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            currentJumpCnt++;
+            Jump();
 
+
+        }   
 
     }
 
@@ -50,10 +56,9 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        //Debug.Log("Space is pushed");
-        if (currentJumpCnt < jumpMaxCnt)
+        if (currentJumpCnt <= jumpMaxCnt)
         {
-            if (currentJumpCnt==0) // 1단점프
+            if (currentJumpCnt==1) // 1단점프
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
                 animator.SetTrigger("Jump");
@@ -63,7 +68,7 @@ public class PlayerController : MonoBehaviour
                 GetComponent<Rigidbody>().AddForce(Vector3.up * DjumpPower, ForceMode.Impulse);
                 animator.SetTrigger("DJump");
             }
-            currentJumpCnt++;
+            
             animator.SetBool("Land", false);
         }
     }
