@@ -7,7 +7,6 @@ public class Item : MonoBehaviour
     protected float topLimit;
     protected float downLimit;
 
-
     protected virtual void Start()
     {
         scrollSpeed = MapManager.Instance.scrollSpeed;

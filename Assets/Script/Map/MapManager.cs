@@ -32,19 +32,20 @@ public class MapManager : MonoBehaviour
     GameObject[] GroundTiles;
     int tileCnt = 6;
 
-    //아이템 스폰
+    
+    #region 아이템 스폰 관련 변수들 
     [Header("Spawn - Limits")]
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-
+    
     [Header("Spawn - Energy")]
     public float spawnRate = 10f;
     float startPoint = -50f;
 
     [Header("Spawn - UpgradeItem")]
     [SerializeField] float spawnTime = 3f; //3초마다 생성
-    float timer = 0;
+    [SerializeField] float timer = 0;
     [SerializeField] float spawnPosZ = -180f;
 
 
@@ -58,8 +59,10 @@ public class MapManager : MonoBehaviour
     [Space(10f)]
     [Header("ObjectPool - Item")]
     public GameObject[] ItemPrefabs;
+    [SerializeField] int[] spawnCnt = {6,4};
     [SerializeField] GameObject ItemPool;
     [SerializeField] List<GameObject> ItemObjs;
+    #endregion
 
     void Start()
     {
@@ -79,9 +82,13 @@ public class MapManager : MonoBehaviour
         //다른 아이템 오브젝트 풀 생성
         for (int i = 0; i < ItemPrefabs.Length; i++)
         {
-            GameObject go = Instantiate(ItemPrefabs[i], ItemPool.transform);
-            ItemObjs.Add(go);
-            go.SetActive(false);
+            for(int j = 0; j < spawnCnt[i]; j++)
+            {
+                GameObject go = Instantiate(ItemPrefabs[i], ItemPool.transform);
+                ItemObjs.Add(go);
+                go.SetActive(false);
+            }
+            
         }
 
         //업그레이트 아이템 스폰을 위한 변수 초기화
@@ -98,21 +105,33 @@ public class MapManager : MonoBehaviour
         }
     }
 
-
-    //아이템 리스트 중 랜덤으로 2개 스폰 
+    /// <summary>
+    /// 아이템 리스트 중 랜덤으로 2개 스폰 
+    /// </summary>
     void SpawnItem()
     {
         Shuffle();
-        for(int i = 0; i < 2; i++)
+        int cnt = 0;
+        int idx = 0;
+        while (cnt<2)
         {
-            GameObject item = ItemObjs[i];
+            if (ItemObjs[idx].activeSelf)
+            {
+                idx++;
+                continue;
+            }
+            GameObject item = ItemObjs[idx];
             item.SetActive(true);
             item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
+            cnt++;
         }
     }
 
 
-    //ItemObjs의 요소를 랜덤으로 섞어주는 함수 
+
+    /// <summary>
+    /// ItemObjs의 요소를 랜덤으로 섞어주는 함수
+    /// </summary>
     void Shuffle()
     {
         int randomIdx;
