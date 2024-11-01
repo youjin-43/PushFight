@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [Header("Move")]
     //[SerializeField] float moveSpeed = 7f;// for 좌우이동 -> 근데 안씀~
     [SerializeField] float jumpPower = 20f;
+    [SerializeField] float DjumpPower = 10f;
     [SerializeField] int jumpMaxCnt = 2;
     [SerializeField] int currentJumpCnt;
     
@@ -36,11 +37,10 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Landed");
             currentJumpCnt = 0;
-            animator.SetTrigger("Land");
+            animator.SetBool("Land",true);
 
         }
     }
-
 
     private void Attack()
     {
@@ -53,16 +53,25 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Space is pushed");
         if (currentJumpCnt < jumpMaxCnt)
         {
-            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            if (currentJumpCnt==0) // 1단점프
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                animator.SetTrigger("Jump");
+            }   
+            else //2단 이상 
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * DjumpPower, ForceMode.Impulse);
+                animator.SetTrigger("DJump");
+            }
             currentJumpCnt++;
-            animator.SetTrigger("Jump");
+            animator.SetBool("Land", false);
         }
     }
 
     private void DoubleJump()
     {
-        Debug.Log("Jump");
-        animator.SetTrigger("DoubleJump");
+        Debug.Log("DoubleJump");
+        animator.SetTrigger("DJump");
     }
 
     private void OnTriggerEnter(Collider other)
