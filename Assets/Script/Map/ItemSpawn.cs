@@ -7,8 +7,7 @@ public class ItemSpawn : MonoBehaviour
     [SerializeField] float spawnRate = 10f;
     float startPoint = -50f;
 
-    [SerializeField] float leftLimit = 2;
-    [SerializeField] float rightLimit = -2;
+    [SerializeField] float startPosX = 0;
     [SerializeField] float topLimit = 20f;
     [SerializeField] float downLimit = 7f;
 
@@ -20,9 +19,7 @@ public class ItemSpawn : MonoBehaviour
     public GameObject AttackItemPool; [SerializeField] int AttackItemCnt = 10; public GameObject AttackPrefab;
     List<GameObject> AttackItemObjs;
 
-    float scrollSpeed = 10f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //아이템 풀 instantiate
@@ -31,7 +28,7 @@ public class ItemSpawn : MonoBehaviour
         {
             GameObject go = Instantiate(EnergePrefab, EnergeItemPool.transform);
             energeObjs.Add(go);
-            go.transform.position = new Vector3(Random.Range(rightLimit, leftLimit), Random.Range(downLimit, topLimit), startPoint + -i * spawnRate);
+            go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint + -i * spawnRate);
         }
         //for (int i = 0; i < AttackItemCnt; i++) AttackItemObjs.Add(Instantiate(AttackPrefab, AttackItemPool.transform));
     }

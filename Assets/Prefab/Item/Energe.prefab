@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 6086245070140553003}
   - component: {fileID: 8327816435751699425}
   - component: {fileID: 5562022583999860513}
-  - component: {fileID: 3897324657849983188}
   - component: {fileID: 6827745113603123341}
   m_Layer: 0
   m_Name: Energe
-  m_TagString: Item
+  m_TagString: Energy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,28 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44646ccf7e6de4867ba543412f72bea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!64 &3897324657849983188
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7535266119704928820}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1330367727831327366, guid: 63c482a4bd859c04f8c7f436018dfeca, type: 3}
+  startPosX: 0
+  movetoPos: 0
+  topLimit: 0
+  downLimit: 0
 --- !u!135 &6827745113603123341
 SphereCollider:
   m_ObjectHideFlags: 0

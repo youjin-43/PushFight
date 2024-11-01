@@ -68,21 +68,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void DoubleJump()
-    {
-        Debug.Log("DoubleJump");
-        animator.SetTrigger("DJump");
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Item")
-        {
-            Debug.Log("아이템과 충돌");
-            other.gameObject.SetActive(false);
-
-        }
-
-    }
 
 }
