@@ -101,10 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44646ccf7e6de4867ba543412f72bea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosX: 0
-  spawnPos: {x: 0, y: 0, z: 0}
-  topLimit: 0
-  downLimit: 0
 --- !u!135 &6827745113603123341
 SphereCollider:
   m_ObjectHideFlags: 0

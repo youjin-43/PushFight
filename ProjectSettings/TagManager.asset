@@ -7,7 +7,6 @@ TagManager:
   - Ground
   - Energy
   - UpgradeItem
-  - AttackItem
   layers:
   - Default
   - TransparentFX

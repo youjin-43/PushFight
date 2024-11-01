@@ -43,8 +43,9 @@ public class MapManager : MonoBehaviour
     float startPoint = -50f;
 
     [Header("Spawn - UpgradeItem")]
-    [SerializeField] float spawnTime = 3f; //3초마다 생성 
+    [SerializeField] float spawnTime = 3f; //3초마다 생성
     float timer = 0;
+    [SerializeField] float spawnPosZ = -180f;
 
 
     [Space(10f)]
@@ -89,8 +90,11 @@ public class MapManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S)) {
-            Shuffle();
+        timer += Time.deltaTime;
+        if (timer > spawnTime)
+        {
+            SpawnItem();
+            timer = 0;
         }
     }
 
@@ -98,10 +102,17 @@ public class MapManager : MonoBehaviour
     //아이템 리스트 중 랜덤으로 2개 스폰 
     void SpawnItem()
     {
-
+        Shuffle();
+        for(int i = 0; i < 2; i++)
+        {
+            GameObject item = ItemObjs[i];
+            item.SetActive(true);
+            item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
+        }
     }
 
 
+    //ItemObjs의 요소를 랜덤으로 섞어주는 함수 
     void Shuffle()
     {
         int randomIdx;

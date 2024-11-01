@@ -3,18 +3,17 @@ using UnityEngine;
 public class Energy : Item
 {
     [SerializeField] Vector3 spawnPos;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    protected override void Start()
     {
+        base.Start();
         spawnPos = transform.position;
     }
 
-    void Update()
+    protected override void Update()
     {
-        if (transform.position.z > 0)
-        {
-            GoStartPos();
-        }
+        base.Update();
+        if (transform.position.z > 0) GoStartPos();
     }
 
     public void GoStartPos()

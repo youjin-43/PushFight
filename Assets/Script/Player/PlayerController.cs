@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
-            Debug.Log("Landed");
+            //Debug.Log("Landed");
             currentJumpCnt = 0;
             animator.SetBool("Land",true);
 
