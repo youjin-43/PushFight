@@ -106,25 +106,15 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 리스트 중 랜덤으로 2개 스폰 
+    /// 아이템 오브젝트 리스트 중 랜덤으로 하나 스폰 
     /// </summary>
     void SpawnItem()
     {
         Shuffle();
-        int cnt = 0;
-        int idx = 0;
-        while (cnt<2)
-        {
-            if (ItemObjs[idx].activeSelf)
-            {
-                idx++;
-                continue;
-            }
-            GameObject item = ItemObjs[idx];
-            item.SetActive(true);
-            item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
-            cnt++;
-        }
+        int idx = 0; while (ItemObjs[idx].activeSelf) idx++;
+        GameObject item = ItemObjs[idx];
+        item.SetActive(true);
+        item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
     }
 
 
