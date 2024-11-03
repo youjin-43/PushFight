@@ -9,15 +9,18 @@ public class Item : MonoBehaviour
 
     protected virtual void Start()
     {
-        scrollSpeed = MapManager.Instance.scrollSpeed;
-        startPosX = MapManager.Instance.startPosX;
-        topLimit = MapManager.Instance.topLimit;
-        downLimit = MapManager.Instance.downLimit;
+        scrollSpeed = MapManager.instance.scrollSpeed;
+        startPosX = MapManager.instance.startPosX;
+        topLimit = MapManager.instance.topLimit;
+        downLimit = MapManager.instance.downLimit;
     }
 
     protected virtual void Update()
     {
+
         transform.position += Vector3.forward * scrollSpeed * Time.deltaTime; // 매 프레임 스크롤 스피드 만큼 이동 
+        
+        
     }
 }
  

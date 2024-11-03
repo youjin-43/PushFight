@@ -3,27 +3,31 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    private static MapManager _instance;
-    public static MapManager Instance
+    //싱글턴으로
+    public static MapManager instance; // 싱글톤을 할당할 전역 변수 -> 이 instance 자체는 게임 오브젝트를 얘기하는것 같고 
+
+    // 게임 시작과 동시에 싱글톤을 구성
+    void Awake()
     {
-        get
+        // 싱글톤 변수 instance가 비어있는가?
+        if (instance == null)
         {
-            if (!_instance)
-            {
-                _instance = FindObjectOfType<MapManager>();
-                if (!_instance)
-                {
-                    GameObject obj = new GameObject();
-                    obj.name = "MapManager";
-                    _instance = obj.AddComponent(typeof(MapManager)) as MapManager;
-                }
-            }
-            return _instance;
+            // instance가 비어있다면(null) 그곳에 자기 자신을 할당
+            instance = this;
+            Debug.Log("맵매니저가 생성됐습니다");
+            DontDestroyOnLoad(gameObject); // 씬이 변경되어도 삭제되지 않도록 
+        }
+        else
+        {
+            // instance에 이미 다른 GameManager 오브젝트가 할당되어 있는 경우 씬에 두개 이상의 GameManager 오브젝트가 존재한다는 의미.
+            // 싱글톤 오브젝트는 하나만 존재해야 하므로 자신의 게임 오브젝트를 파괴
+            Debug.LogWarning("씬에 두개 이상의 맵 매니저가 존재합니다!");
+            Destroy(gameObject);
+            Debug.Log("맵 매니저를 삭제합니다");
         }
     }
 
 
-    
     public float scrollSpeed = 20f;
     [Space(10f)]
 
@@ -103,6 +107,29 @@ public class MapManager : MonoBehaviour
             SpawnItem();
             timer = 0;
         }
+    }
+
+
+    // TODO : 아이템, 타일 스크롤링 연동 
+    public void StopScrolling()
+    {
+
+    }
+
+
+    // TODO : [해결]왜 여기서 널 레퍼런스가 뜨지??? -> 맵 매니저가 타일을 생성한 후 게임매니저가 스크롤링을 시작해야하는데 여기서 순서가 꼬이는것 같음 -> 순서를 지정해주자
+    // TODO : 근데 왜 안움직이냐ㅋㅋㅋㅋㅋㅋㅋㅋ
+    public void StartScrolling()
+    {
+
+        //타일 스크롤링
+        foreach(GameObject tile in GroundTiles)
+        {
+            Debug.Log(tile.GetComponent<TileScroll>());
+            tile.GetComponent<TileScroll>().StartTileScolling();
+        }
+
+        //TODO : 아이템 스크롤링 
     }
 
     /// <summary>
