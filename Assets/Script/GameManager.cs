@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     public State GameState = State.Day;
     
-    public float Daytime = 15f;
+    public float SkyScrollSpeed = 5f;
 
     void Start()
     {
@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        // TODO : 게임매니저에서 상태만 바꾸면 알아서 스크롤링 멈추고 다시 스크롤링 하고. 근데 Update는 최대한 사용안하는 방향으로.. -> 코루틴 이용! 
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (GameState == State.Day) {
@@ -63,26 +61,22 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // TODO : 스크롤링 정지(타일(완) 아이템(완))
-    // TODO : 밤이 되면 에너지 스폰을 멈춤 -> 맵을벗어나면서 알아서 다 비활성화 됨
     // TODO : 플레이어 전투 애니메이션으로  전환
+    // TODO : 카메라 위치 전환 
     void ChangeStateToNight()
     {
         Debug.Log("밤이 되었습니다~");
         GameState = State.Night;
         MapManager.instance.Stop_ItemSpawnRepeatedly();
-        MapManager.instance.Stop_Scrolling();
+        MapManager.instance.Stop_TileScrolling();
     }
 
-
-    // TODO : 아 그럼 낮 되면 에너지 다시 배치애햐하네?
-    // TODO : 아 근데 갑자기 딱 나오면 뭔가 부자연스러울것 같은데.. 멀리서 자연스럽게 오는게 낫지않나? 흠.. 우선 낮밤 하고 나중에 고민. 
     void ChangeStateToDay()
     {
         Debug.Log("낮이 되었습니다~");
         GameState = State.Day;
         MapManager.instance.Start_ItemSpawnRepeatedly();
-        MapManager.instance.Start_Scrolling();
+        MapManager.instance.Start_TileScrolling();
     }
 
     void GameOver()
