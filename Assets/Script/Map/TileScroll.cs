@@ -17,10 +17,7 @@ public class TileScroll : MonoBehaviour
         while (true)
         {
             transform.position += Vector3.forward * scrollSpeed * Time.deltaTime;
-            if (transform.position.z > 100)
-            {
-                transform.position = new Vector3(0, 0, -500f);
-            }
+            if (transform.position.z > 100) transform.position = new Vector3(0, 0, -500f);
             yield return null;
         }
     }

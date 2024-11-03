@@ -5,7 +5,7 @@ public class ItemPool : MonoBehaviour
 {
 
     [Header("ObjectPool - Energy")]
-    public int EnergeItemPoolCnt = 20;
+    public int EnergeItemPoolCnt = 25;
     [SerializeField] GameObject EnergeItemPool; //에너지 오브젝트를 모아놓을 엠티 오브젝트 -> 인스펙터에서 할당 
     [SerializeField] GameObject EnergePrefab; //생성할 에너지 프리팹 -> 인스펙터에서 할당
     public List<GameObject> energeObjs;

@@ -71,7 +71,8 @@ public class MapManager : MonoBehaviour
         for(int i = 0; i < maxSpawnCnt_energy; i++)
         {
             GameObject go = itemPool.energeObjs[i];
-            go.SetActive(true);
+            go.SetActive(true);//활성화
+            go.GetComponent<Item>().StartItemScolling(); //스크롤링 시작 
             go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint+startSpawnRate*-i);
         }
         timer_upgradeItem = 0;//업그레이트 아이템 스폰을 위한 변수 초기화
@@ -94,16 +95,34 @@ public class MapManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 랜덤 y 위치에 에너지 오브젝트 스폰  
+    /// </summary>
     void SpawnEnergy()
     {
         GameObject energy = itemPool.GetEnergyObj();
+        energy.GetComponent<Item>().StartItemScolling();
         energy.transform.position= new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
     }
+
+    /// <summary>
+    /// 아이템 오브젝트 리스트 중 랜덤으로 하나 스폰 
+    /// </summary>
+    void SpawnItem()
+    {
+        itemPool.Shuffle();
+        int idx = 0; while (itemPool.ItemObjs[idx].activeSelf) idx++;
+        GameObject item = itemPool.ItemObjs[idx];
+        item.SetActive(true); //활성화 
+        item.GetComponent<Item>().StartItemScolling(); // 스크롤링 시작
+        item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
+    }
+
 
     // TODO : 아이템, 타일 스크롤링 연동 
     public void StopScrolling()
     {
-
         //타일 스크롤링
         foreach (GameObject tile in GroundTiles)
         {
@@ -123,19 +142,6 @@ public class MapManager : MonoBehaviour
 
         //TODO : 아이템 스크롤링 
     }
-
-    /// <summary>
-    /// 아이템 오브젝트 리스트 중 랜덤으로 하나 스폰 
-    /// </summary>
-    void SpawnItem()
-    {
-        itemPool.Shuffle();
-        int idx = 0; while (itemPool.ItemObjs[idx].activeSelf) idx++;
-        GameObject item = itemPool.ItemObjs[idx];
-        item.SetActive(true);
-        item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
-    }
-
 
 
    
