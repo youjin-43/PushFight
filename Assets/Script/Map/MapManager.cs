@@ -118,14 +118,14 @@ public class MapManager : MonoBehaviour
 
 
     // TODO : [해결]왜 여기서 널 레퍼런스가 뜨지??? -> 맵 매니저가 타일을 생성한 후 게임매니저가 스크롤링을 시작해야하는데 여기서 순서가 꼬이는것 같음 -> 순서를 지정해주자
-    // TODO : 근데 왜 안움직이냐ㅋㅋㅋㅋㅋㅋㅋㅋ
+    // TODO : 근데 왜 안움직이냐ㅋㅋㅋㅋㅋㅋㅋ 
     public void StartScrolling()
     {
 
         //타일 스크롤링
         foreach(GameObject tile in GroundTiles)
         {
-            Debug.Log(tile.GetComponent<TileScroll>());
+            //Debug.Log(tile.GetComponent<TileScroll>()); // 각 타일에 접근도 잘 하는것 같음 
             tile.GetComponent<TileScroll>().StartTileScolling();
         }
 

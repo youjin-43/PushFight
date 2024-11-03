@@ -30,13 +30,16 @@ public class TileScroll : MonoBehaviour
 
     IEnumerator TileScrollCoroutine()
     {
-        transform.position += Vector3.forward * scrollSpeed * Time.deltaTime;
-        if (transform.position.z > 100)
+        Debug.Log("코루틴 실행됨");
+        while (true)
         {
-            transform.position = new Vector3(0, 0, -500f);
+            transform.position += Vector3.forward * scrollSpeed * Time.deltaTime;
+            if (transform.position.z > 100)
+            {
+                transform.position = new Vector3(0, 0, -500f);
+            }
+            yield return null;
         }
-        yield break;
-        
     }
 
     public void StopTileScolling()
@@ -49,7 +52,7 @@ public class TileScroll : MonoBehaviour
     public void StartTileScolling()
     {
 
-        Debug.Log("tileScroll에서 StartTileScolling 함수 호출됨");
+        //Debug.Log("tileScroll에서 StartTileScolling 함수 호출됨"); 호출은 잘 됨 
         StartCoroutine(TileScrollCoroutine());
     }
 }
