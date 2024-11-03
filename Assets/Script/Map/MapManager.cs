@@ -55,7 +55,6 @@ public class MapManager : MonoBehaviour
     [Header("Spawn - UpgradeItem")]
     [SerializeField] float spawnTime_upgradeItem = 3f; //3초마다 생성
     [SerializeField] float timer_upgradeItem = 0;
-    //[SerializeField] float spawnPosZ = -180f;
     #endregion
 
 
@@ -87,7 +86,6 @@ public class MapManager : MonoBehaviour
 
     Coroutine energySpawnCorutine;
     Coroutine upgreadeItemSpawnCorutine;
-
     /// <summary>
     /// 에너지와 업그레이드 아이템을 지속적으로 스폰하는 코루틴 실행 
     /// </summary>
@@ -106,8 +104,6 @@ public class MapManager : MonoBehaviour
         StopCoroutine(upgreadeItemSpawnCorutine);
     }
 
-
-    // TODO : 에너지랑 아이템 지속적으로 스폰되는거도 코루틴으로 해야하나....
     /// <summary>
     /// 일정 rate 마다 에너지 지속 스폰 
     /// </summary>
@@ -168,11 +164,8 @@ public class MapManager : MonoBehaviour
         item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
     }
 
-
-    // TODO : 아이템, 타일 스크롤링 연동 
-    public void Stop_Scrolling()
+    public void Stop_TileScrolling()
     {
-        //타일 스크롤링
         foreach (GameObject tile in GroundTiles)
         {
             //Debug.Log(tile.GetComponent<TileScroll>()); // 각 타일에 접근도 잘 하는것 같음 
@@ -180,16 +173,12 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void Start_Scrolling()
+    public void Start_TileScrolling()
     {
-
-        //타일 스크롤링
         foreach(GameObject tile in GroundTiles)
         {
             tile.GetComponent<TileScroll>().StartTileScolling();
         }
-
-        //TODO : 아이템 스크롤링 
     }
 
 
