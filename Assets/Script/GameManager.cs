@@ -41,7 +41,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        ChangeStateToDay();
+        MapManager.instance.GenTiles();// 맵 생성 
+        MapManager.instance.GenEnergy(); // 에너지 맵에 배치
+        ChangeStateToDay(); //게임 상태 낮으로 시작 
     }
 
     // Update is called once per frame
@@ -60,20 +62,27 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     
-    // TODO : 스크롤링 정지(타일(완) 아이템)
-    // TODO : 플레이어 전투 애니메이션 전환
+    // TODO : 스크롤링 정지(타일(완) 아이템(완))
+    // TODO : 밤이 되면 에너지 스폰을 멈춤 -> 맵을벗어나면서 알아서 다 비활성화 됨
+    // TODO : 플레이어 전투 애니메이션으로  전환
     void ChangeStateToNight()
     {
+        Debug.Log("밤이 되었습니다~");
         GameState = State.Night;
-        MapManager.instance.StopScrolling();
+        MapManager.instance.Stop_ItemSpawnRepeatedly();
+        MapManager.instance.Stop_Scrolling();
     }
 
+
+    // TODO : 아 그럼 낮 되면 에너지 다시 배치애햐하네?
+    // TODO : 아 근데 갑자기 딱 나오면 뭔가 부자연스러울것 같은데.. 멀리서 자연스럽게 오는게 낫지않나? 흠.. 우선 낮밤 하고 나중에 고민. 
     void ChangeStateToDay()
     {
+        Debug.Log("낮이 되었습니다~");
         GameState = State.Day;
-        MapManager.instance.StartScrolling();
+        MapManager.instance.Start_ItemSpawnRepeatedly();
+        MapManager.instance.Start_Scrolling();
     }
 
     void GameOver()

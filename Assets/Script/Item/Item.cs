@@ -18,7 +18,7 @@ public class Item : MonoBehaviour
 
     IEnumerator ItemScrollCoroutine()
     {
-        Debug.Log(gameObject.name + "의 코루틴 실행");
+        //Debug.Log(gameObject.name + "의 코루틴 실행");
         while (true)
         {
             transform.position += Vector3.forward * scrollSpeed * Time.deltaTime; // 매 프레임 스크롤 스피드 만큼 이동

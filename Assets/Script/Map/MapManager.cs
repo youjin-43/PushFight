@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -59,39 +59,88 @@ public class MapManager : MonoBehaviour
     #endregion
 
 
-
-
-    void Start()
+    /// <summary>
+    /// count 만큼 루프하면서 발판 생성
+    /// </summary>
+    public void GenTiles()
     {
-        // count 만큼 루프하면서 발판 생성
         GroundTiles = new GameObject[tileCnt];
-        for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i%3], new Vector3(0, 0, -100*i), Quaternion.identity);
+        for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i % 3], new Vector3(0, 0, -100 * i), Quaternion.identity);
 
-        // 에너지 맵에 배치
-        for(int i = 0; i < maxSpawnCnt_energy; i++)
+    }
+
+
+    /// <summary>
+    /// 에너지를 맵에 쫘아아악 배치하는 함수 
+    /// </summary>
+    public void GenEnergy()
+    {
+        for (int i = 0; i < maxSpawnCnt_energy; i++)
         {
             GameObject go = itemPool.energeObjs[i];
             go.SetActive(true);//활성화
             go.GetComponent<Item>().StartItemScolling(); //스크롤링 시작 
-            go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint+startSpawnRate*-i);
+            go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint + startSpawnRate * -i);
         }
-        timer_upgradeItem = 0;//업그레이트 아이템 스폰을 위한 변수 초기화
     }
 
-    private void Update()
-    {
-        timer_upgradeItem += Time.deltaTime;
-        if (timer_upgradeItem > spawnTime_upgradeItem)
-        {
-            SpawnItem();
-            timer_upgradeItem = 0;
-        }
 
-        timer_energy+= Time.deltaTime;
-        if (timer_energy > spawnTime_energy)
+    Coroutine energySpawnCorutine;
+    Coroutine upgreadeItemSpawnCorutine;
+
+    /// <summary>
+    /// 에너지와 업그레이드 아이템을 지속적으로 스폰하는 코루틴 실행 
+    /// </summary>
+    public void Start_ItemSpawnRepeatedly()
+    {
+        energySpawnCorutine = StartCoroutine(SpawnEnergyRepeatedly());
+        upgreadeItemSpawnCorutine = StartCoroutine(SpawnUpgradeItemRepeatedly());
+    }
+
+    /// <summary>
+    /// 에너지와 업그레이드 아이템을 지속적으로 스폰하는 코루틴 실행 
+    /// </summary>
+    public void Stop_ItemSpawnRepeatedly()
+    {
+        StopCoroutine(energySpawnCorutine);
+        StopCoroutine(upgreadeItemSpawnCorutine);
+    }
+
+
+    // TODO : 에너지랑 아이템 지속적으로 스폰되는거도 코루틴으로 해야하나....
+    /// <summary>
+    /// 일정 rate 마다 에너지 지속 스폰 
+    /// </summary>
+    public IEnumerator SpawnEnergyRepeatedly()
+    {
+        timer_energy = 0;
+        while (true)
         {
-            SpawnEnergy();
-            timer_energy = 0;
+            timer_energy += Time.deltaTime;
+            if (timer_energy > spawnTime_energy)
+            {
+                SpawnEnergy();
+                timer_energy = 0;
+            }
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 일정 rate 마다 아이템 지속 스폰 
+    /// </summary>
+    public IEnumerator SpawnUpgradeItemRepeatedly()
+    {
+        timer_upgradeItem = 0;//업그레이트 아이템 스폰을 위한 변수 초기화
+        while (true)
+        {
+            timer_upgradeItem += Time.deltaTime;
+            if (timer_upgradeItem > spawnTime_upgradeItem)
+            {
+                SpawnItem();
+                timer_upgradeItem = 0;
+            }
+            yield return null;
         }
     }
 
@@ -121,7 +170,7 @@ public class MapManager : MonoBehaviour
 
 
     // TODO : 아이템, 타일 스크롤링 연동 
-    public void StopScrolling()
+    public void Stop_Scrolling()
     {
         //타일 스크롤링
         foreach (GameObject tile in GroundTiles)
@@ -131,7 +180,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void StartScrolling()
+    public void Start_Scrolling()
     {
 
         //타일 스크롤링
@@ -143,7 +192,5 @@ public class MapManager : MonoBehaviour
         //TODO : 아이템 스크롤링 
     }
 
-
-   
 
 }
