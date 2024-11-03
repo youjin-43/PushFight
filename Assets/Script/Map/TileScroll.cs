@@ -4,7 +4,7 @@ using UnityEngine;
 public class TileScroll : MonoBehaviour
 {
     float scrollSpeed;
-    IEnumerator coroutine;
+    Coroutine coroutine;
 
 
     private void Awake()
@@ -30,7 +30,7 @@ public class TileScroll : MonoBehaviour
 
     IEnumerator TileScrollCoroutine()
     {
-        Debug.Log("코루틴 실행됨");
+        //Debug.Log("코루틴 실행됨");
         while (true)
         {
             transform.position += Vector3.forward * scrollSpeed * Time.deltaTime;
@@ -44,7 +44,8 @@ public class TileScroll : MonoBehaviour
 
     public void StopTileScolling()
     {
-        StopCoroutine(TileScrollCoroutine());
+        //StopCoroutine(TileScrollCoroutine());
+        StopCoroutine(coroutine);
     }
 
 
@@ -53,6 +54,6 @@ public class TileScroll : MonoBehaviour
     {
 
         //Debug.Log("tileScroll에서 StartTileScolling 함수 호출됨"); 호출은 잘 됨 
-        StartCoroutine(TileScrollCoroutine());
+        coroutine = StartCoroutine(TileScrollCoroutine());
     }
 }

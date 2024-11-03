@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        // TODO : 게임매니저에서 상태만 바꾸면 알아서 스크롤링 멈추고 다시 스크롤링 하고. 근데 Update는 최대한 사용안하는 방향으로.. 
+        // TODO : 게임매니저에서 상태만 바꾸면 알아서 스크롤링 멈추고 다시 스크롤링 하고. 근데 Update는 최대한 사용안하는 방향으로.. -> 코루틴 이용! 
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (GameState == State.Day) {
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     void ChangeStateToNight()
     {
         GameState = State.Night;
+        MapManager.instance.StopScrolling();
     }
 
     void ChangeStateToDay()

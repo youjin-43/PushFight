@@ -114,6 +114,12 @@ public class MapManager : MonoBehaviour
     public void StopScrolling()
     {
 
+        //타일 스크롤링
+        foreach (GameObject tile in GroundTiles)
+        {
+            //Debug.Log(tile.GetComponent<TileScroll>()); // 각 타일에 접근도 잘 하는것 같음 
+            tile.GetComponent<TileScroll>().StopTileScolling();
+        }
     }
 
 
