@@ -1037,6 +1037,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5828630090233647465, guid: a51dc6a3374b14f0ea07c3c780afeb5e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6069289017370590467, guid: a51dc6a3374b14f0ea07c3c780afeb5e, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1377,10 +1381,10 @@ MonoBehaviour:
   startPosX: 0
   topLimit: 15
   downLimit: 7
+  spawnPosZ: -180
   spawnRate: 10
   spawnTime: 3
   timer: 0
-  spawnPosZ: -180
   EnergeItemCnt: 15
   EnergeItemPool: {fileID: 383077153}
   EnergePrefab: {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}

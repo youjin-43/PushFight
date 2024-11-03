@@ -36,37 +36,34 @@ public class MapManager : MonoBehaviour
     GameObject[] GroundTiles;
     int tileCnt = 6;
 
-    
-    #region 아이템 스폰 관련 변수들 
+
+    #region 아이템 스폰 관련 변수들
+    [SerializeField] ItemPool itemPool; // 인스펙터에서 할당해줌 
+
     [Header("Spawn - Limits")]
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-    
+    [SerializeField] public float spawnPosZ = -180f;
+    //TODO: spawnPosZ 스폰되는거 확인하고 조정해줘야함
+
     [Header("Spawn - Energy")]
-    public float spawnRate = 10f;
+    public float startSpawnRate = 10f;
     float startPoint = -50f;
+    [SerializeField] int maxSpawnCnt_energy = 15;
+    [SerializeField] float spawnTime_energy = 0.3f; //0.3초마다 생성
+    [SerializeField] float timer_energy = 0;
 
     [Header("Spawn - UpgradeItem")]
-    [SerializeField] float spawnTime = 3f; //3초마다 생성
-    [SerializeField] float timer = 0;
-    [SerializeField] float spawnPosZ = -180f;
-
-
-    [Space(10f)]
-    [Header("ObjectPool - Energy")]
-    public int EnergeItemCnt = 15;
-    [SerializeField] GameObject EnergeItemPool;
-    [SerializeField] GameObject EnergePrefab;
-    List<GameObject> energeObjs;
-
-    [Space(10f)]
-    [Header("ObjectPool - Item")]
-    public GameObject[] ItemPrefabs;
-    [SerializeField] int[] spawnCnt = {6,4};
-    [SerializeField] GameObject ItemPool;
-    [SerializeField] List<GameObject> ItemObjs;
+    [SerializeField] float spawnTime_upgradeItem = 3f; //3초마다 생성
+    [SerializeField] float timer_upgradeItem = 0;
+    //[SerializeField] float spawnPosZ = -180f;
     #endregion
+
+
+    //TODO : 에너지 스폰 방식 변경 -> set active 이용하는 방식으로
+    
+
 
     void Start()
     {
@@ -74,41 +71,43 @@ public class MapManager : MonoBehaviour
         GroundTiles = new GameObject[tileCnt];
         for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i%3], new Vector3(0, 0, -100*i), Quaternion.identity);
 
-        // 에너지 오브젝트 풀 생성하고 맵에 배치
-        energeObjs = new List<GameObject>();
-        for (int i = 0; i < EnergeItemCnt; i++)
+        // 에너지 맵에 배치
+        for(int i = 0; i < maxSpawnCnt_energy; i++)
         {
-            GameObject go = Instantiate(EnergePrefab, EnergeItemPool.transform);
-            energeObjs.Add(go);
-            go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint + -i * spawnRate);
+            GameObject go = itemPool.energeObjs[i];
+            go.SetActive(true);
+            go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint+startSpawnRate*-i);
         }
 
-        //다른 아이템 오브젝트 풀 생성
-        for (int i = 0; i < ItemPrefabs.Length; i++)
-        {
-            for(int j = 0; j < spawnCnt[i]; j++)
-            {
-                GameObject go = Instantiate(ItemPrefabs[i], ItemPool.transform);
-                ItemObjs.Add(go);
-                go.SetActive(false);
-            }
-            
-        }
-
-        //업그레이트 아이템 스폰을 위한 변수 초기화
-        timer = 0;
+        timer_upgradeItem = 0;//업그레이트 아이템 스폰을 위한 변수 초기화
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > spawnTime)
+       
+        timer_upgradeItem += Time.deltaTime;
+        if (timer_upgradeItem > spawnTime_upgradeItem)
         {
             SpawnItem();
-            timer = 0;
+            timer_upgradeItem = 0;
         }
+
+        // TODO : 에너지 일정하게 무한 스폰 -> 플레이어가 먹거나 맵을 넘어가면 비활성화되고, 스폰 포인트에서 스폰 시간마다 비활성화된 에너지 중 하나를 활성화 시키는 방식으로
+        timer_energy+= Time.deltaTime;
+        if (timer_energy > spawnTime_energy)
+        {
+            SpawnEnergy();
+            timer_energy = 0;
+        }
+
+
     }
 
+    void SpawnEnergy()
+    {
+        GameObject energy = itemPool.GetEnergyObj();
+        energy.transform.position= new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
+    }
 
     // TODO : 아이템, 타일 스크롤링 연동 
     public void StopScrolling()
@@ -122,16 +121,12 @@ public class MapManager : MonoBehaviour
         }
     }
 
-
-    // TODO : [해결]왜 여기서 널 레퍼런스가 뜨지??? -> 맵 매니저가 타일을 생성한 후 게임매니저가 스크롤링을 시작해야하는데 여기서 순서가 꼬이는것 같음 -> 순서를 지정해주자
-    // TODO : 근데 왜 안움직이냐ㅋㅋㅋㅋㅋㅋㅋ 
     public void StartScrolling()
     {
 
         //타일 스크롤링
         foreach(GameObject tile in GroundTiles)
         {
-            //Debug.Log(tile.GetComponent<TileScroll>()); // 각 타일에 접근도 잘 하는것 같음 
             tile.GetComponent<TileScroll>().StartTileScolling();
         }
 
@@ -143,30 +138,15 @@ public class MapManager : MonoBehaviour
     /// </summary>
     void SpawnItem()
     {
-        Shuffle();
-        int idx = 0; while (ItemObjs[idx].activeSelf) idx++;
-        GameObject item = ItemObjs[idx];
+        itemPool.Shuffle();
+        int idx = 0; while (itemPool.ItemObjs[idx].activeSelf) idx++;
+        GameObject item = itemPool.ItemObjs[idx];
         item.SetActive(true);
         item.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), spawnPosZ);
     }
 
 
 
-    /// <summary>
-    /// ItemObjs의 요소를 랜덤으로 섞어주는 함수
-    /// </summary>
-    void Shuffle()
-    {
-        int randomIdx;
-        for (int i=0;i< ItemObjs.Count; i++)
-        {
-            randomIdx = Random.Range(0, ItemObjs.Count);
-
-            //swap
-            GameObject itme_1 = ItemObjs[i]; GameObject itme_2 = ItemObjs[randomIdx];
-            (itme_1, itme_2) = (itme_2, itme_1);
-            ItemObjs[i] = itme_1; ItemObjs[randomIdx] = itme_2;
-        }
-    }
+   
 
 }
