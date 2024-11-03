@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 1395524065852850340}
   - component: {fileID: 1419780360643714629}
   - component: {fileID: 5383493706969335711}
-  - component: {fileID: 8422965578364389371}
+  - component: {fileID: 6244300612182523058}
   m_Layer: 0
   m_Name: Energe 1
   m_TagString: Energy
@@ -234,7 +234,7 @@ MonoBehaviour:
   bounceSpeed: 8
   bounceAmplitude: 0.05
   rotationSpeed: 90
---- !u!114 &8422965578364389371
+--- !u!114 &6244300612182523058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8411062225389914564}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3413fce8e39dc47ca9e43b6faf9df8e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 44646ccf7e6de4867ba543412f72bea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPos: {x: 0, y: 0, z: 0}
+  type: 1
