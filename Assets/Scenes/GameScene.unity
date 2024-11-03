@@ -335,6 +335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 185114516}
+  - component: {fileID: 185114517}
   m_Layer: 0
   m_Name: ItemPool
   m_TagString: Untagged
@@ -359,6 +360,28 @@ Transform:
   - {fileID: 916355198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &185114517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185114515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2e7cc65cfdd4e1fb4ccb7b47d7bc73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnergeItemPoolCnt: 20
+  EnergeItemPool: {fileID: 383077153}
+  EnergePrefab: {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}
+  energeObjs: []
+  ItemPrefabs:
+  - {fileID: 894215939931545293, guid: 6e44f609ac12243a197d6341ac70cb3d, type: 3}
+  - {fileID: 8816352745581931424, guid: 5bc9094bd48b1445cb64737da8864344, type: 3}
+  spawnCnt: 0600000004000000
+  UpgradeItemPool: {fileID: 916355197}
+  ItemObjs: []
 --- !u!1 &326649885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,22 +1401,17 @@ MonoBehaviour:
   - {fileID: 5120559338575783861, guid: acb287ec705204b8585212c1b0333239, type: 3}
   - {fileID: 8558530507352790216, guid: c785f1fd2f23b4593bd336046c48bce2, type: 3}
   - {fileID: 1176647620443736128, guid: d21c6cc231ca74e339889322b6f5f5e0, type: 3}
+  itemPool: {fileID: 185114517}
   startPosX: 0
   topLimit: 15
   downLimit: 7
   spawnPosZ: -180
-  spawnRate: 10
-  spawnTime: 3
-  timer: 0
-  EnergeItemCnt: 15
-  EnergeItemPool: {fileID: 383077153}
-  EnergePrefab: {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}
-  ItemPrefabs:
-  - {fileID: 894215939931545293, guid: 6e44f609ac12243a197d6341ac70cb3d, type: 3}
-  - {fileID: 8816352745581931424, guid: 5bc9094bd48b1445cb64737da8864344, type: 3}
-  spawnCnt: 0600000004000000
-  ItemPool: {fileID: 916355197}
-  ItemObjs: []
+  startSpawnRate: 10
+  maxSpawnCnt_energy: 15
+  spawnTime_energy: 0.3
+  timer_energy: 0
+  spawnTime_upgradeItem: 3
+  timer_upgradeItem: 0
 --- !u!4 &1481566158
 Transform:
   m_ObjectHideFlags: 0

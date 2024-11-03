@@ -27,7 +27,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-
     public float scrollSpeed = 20f;
     [Space(10f)]
 
@@ -38,14 +37,13 @@ public class MapManager : MonoBehaviour
 
 
     #region 아이템 스폰 관련 변수들
-    [SerializeField] ItemPool itemPool; // 인스펙터에서 할당해줌 
+    [SerializeField]ItemPool itemPool; // 인스펙터에서 할당해줌 
 
     [Header("Spawn - Limits")]
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-    [SerializeField] public float spawnPosZ = -180f;
-    //TODO: spawnPosZ 스폰되는거 확인하고 조정해줘야함
+    [SerializeField] public float spawnPosZ = -180f; //대충 적당히 찍었는데 자연스러움ㅋㅋ 
 
     [Header("Spawn - Energy")]
     public float startSpawnRate = 10f;
@@ -61,8 +59,6 @@ public class MapManager : MonoBehaviour
     #endregion
 
 
-    //TODO : 에너지 스폰 방식 변경 -> set active 이용하는 방식으로
-    
 
 
     void Start()
@@ -78,13 +74,11 @@ public class MapManager : MonoBehaviour
             go.SetActive(true);
             go.transform.position = new Vector3(startPosX, Random.Range(downLimit, topLimit), startPoint+startSpawnRate*-i);
         }
-
         timer_upgradeItem = 0;//업그레이트 아이템 스폰을 위한 변수 초기화
     }
 
     private void Update()
     {
-       
         timer_upgradeItem += Time.deltaTime;
         if (timer_upgradeItem > spawnTime_upgradeItem)
         {
@@ -92,15 +86,12 @@ public class MapManager : MonoBehaviour
             timer_upgradeItem = 0;
         }
 
-        // TODO : 에너지 일정하게 무한 스폰 -> 플레이어가 먹거나 맵을 넘어가면 비활성화되고, 스폰 포인트에서 스폰 시간마다 비활성화된 에너지 중 하나를 활성화 시키는 방식으로
         timer_energy+= Time.deltaTime;
         if (timer_energy > spawnTime_energy)
         {
             SpawnEnergy();
             timer_energy = 0;
         }
-
-
     }
 
     void SpawnEnergy()

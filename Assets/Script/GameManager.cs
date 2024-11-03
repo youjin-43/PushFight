@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     }
 
     
-    // TODO : 스크롤링 정지(타일 아이템)
+    // TODO : 스크롤링 정지(타일(완) 아이템)
     // TODO : 플레이어 전투 애니메이션 전환
     void ChangeStateToNight()
     {
