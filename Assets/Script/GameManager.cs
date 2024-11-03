@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     public State GameState = State.Day;
     
-    public float Daytime = 15f;
+    public float SkyScrollSpeed = 5f;
 
     void Start()
     {
