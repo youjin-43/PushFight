@@ -15,10 +15,6 @@ public class GameManager : MonoBehaviour
             // instance가 비어있다면(null) 그곳에 자기 자신을 할당
             instance = this;
             Debug.Log("게임매니저가 생성됐습니다");
-
-
-            //TODO : 맵 매니저랑 게임 매니저 이거 없어도 될것 같은데?
-            DontDestroyOnLoad(gameObject); // 씬이 변경되어도 삭제되지 않도록 
         }
         else
         {
@@ -39,7 +35,7 @@ public class GameManager : MonoBehaviour
         GameOver
     }
 
-    [SerializeField] PlayerController playerController; //인스펙터에서 할당
+    [SerializeField] PlayerController playerController;
     [SerializeField] GameObject mainCamera;
     [SerializeField] Vector3 cameraAttackModePos = new Vector3(-3.5f,10f,-2.6f);
     [SerializeField] Vector3 cameraAttackModeAngle = new Vector3(0.1f,179f,359f);
@@ -47,14 +43,20 @@ public class GameManager : MonoBehaviour
     public State GameState = State.Day;
 
     [Header("TimeState Control")]
-    public float Daytime = 20;
-    public float SkyScrollSpeed = 0.0015f;
+    [SerializeField] float SkyScrollSpeed = 0.02f;
     float Offset_DayStart = 0.7f;
     [SerializeField] Renderer SkyRend;
     [SerializeField] float offset;
 
+    [Header("TimeState Control")]
+    public GameObject currentMonster;
+
     void Start()
     {
+        playerController = FindFirstObjectByType<PlayerController>();
+        mainCamera = GameObject.Find("MainCamera");
+        SkyRend = GameObject.Find("SkyDome").GetComponent<Renderer>();
+
         MapManager.instance.GenTiles();// 맵 생성 
         MapManager.instance.GenEnergy(); // 에너지 맵에 배치
         ChangeStateToDay(); //처음 낮으로 게임 시작 
@@ -117,7 +119,9 @@ public class GameManager : MonoBehaviour
         MapManager.instance.Stop_ItemSpawnRepeatedly();
 
     }
-     
+
+
+
 
     /// <summary>
     /// 밤 : 전투 준비 + 몹 스폰 + 전투 진행
@@ -131,19 +135,46 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CameraMovetoAttack()); // 전투모드로 카메라 위치 이동
         MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
         playerController.Aim(); // 캐릭터가 조준
-                                                                                               // TODO : 스페이스바를 누르면 화살 나감 -> 몹이 맞으면 피격 모션 -> 체력 바 닳기
-                                                                                               // TODO : 몹 체력 0 되면 사망 모션 
+
+        
     }
+
 
     void ChangeState_ToTwilight()
     {
         Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
+
+        //몹을 죽였는지 확인
+        if (currentMonster.GetComponent<Monster>().isAlive)
+        {
+            //todo : 몹을 죽이지 못한경우 -> 남은 몹 채력 만큼 에너지 소비
+
+            //todo : 에너지를 다 썼는데도 죽이지 못했다면 게임 오버 
+
+
+            //todo : 그랬는데도 죽이지 못한경우 몹이 플레이어를 공격하며 게임 오버
+            GameOver();
+        }
+        else
+        {
+            // todo : 몹을 죽인경우 -> 보상 선택 
+            Debug.Log("몹을 죽이는데 성공했습니다");
+
+        }
+
+
+
+
     }
 
+
+
+    // TODO : 게임 오버 구현 
     void GameOver()
     {
-        //게임오버 
+        //게임오버
+        Debug.Log("GameOver");
     }
 
 

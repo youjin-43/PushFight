@@ -41,12 +41,7 @@ public class PlayerController : MonoBehaviour
             {
                 //밤에는 공격
                 Attack();
-                //TODO : 화살 발사되는지 확인 
             }
-
-            //다른 상태라면 스페이스 입력 무시 
-
-
         }   
 
     }
@@ -94,18 +89,16 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Aim");
     }
 
-    //TODO : 화살 오브젝트 풀 구현
-    //TODO : 공격 누르면 화살 발사 -> 몹이 맞으면 애니메이션 작동
+
+    //todo : 플레이어 공격모션 설정 
     Vector3 arrowOffset = new Vector3(0, 1, -1);
     private void Attack()
     {
-        Debug.Log("Attack");
+        //Debug.Log("Attack");
         //animator.SetTrigger("Attack");
         GameObject go = ArrowPool.GetArrowObj();
         go.transform.position = transform.position+ arrowOffset; //화살을 플레이어 위치로 
-
-        Debug.Log(go.name);
-        // TODO : 활성화 되면 알아서 발사 되도록 했는데 확인해봐야함 
+        // 화살이 활성화 되면 알아서 발사 됨 
     }
 
 }
