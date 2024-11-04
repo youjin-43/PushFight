@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,12 +36,16 @@ public class GameManager : MonoBehaviour
         GameOver
     }
 
+    [SerializeField] PlayerController playerController; //인스펙터에서 할당
+    [SerializeField] GameObject mainCamera;
+    [SerializeField] Vector3 cameraAttackModePos = new Vector3(-3.5f,10f,-2.6f);
+    [SerializeField] Vector3 cameraAttackModeAngle = new Vector3(0.1f,179f,359f);
 
     public State GameState = State.Day;
 
     [Header("TimeState Control")]
     public float Daytime = 20;
-    public float SkyScrollSpeed = 5f;
+    public float SkyScrollSpeed = 0.0015f;
     float Offset_DayStart = 0.7f;
     [SerializeField] Renderer SkyRend;
     [SerializeField] float offset;
@@ -50,47 +54,48 @@ public class GameManager : MonoBehaviour
     {
         MapManager.instance.GenTiles();// 맵 생성 
         MapManager.instance.GenEnergy(); // 에너지 맵에 배치
+        ChangeStateToDay(); //처음 낮으로 게임 시작 
+
+
+
     }
    
     void Update()
     {
-        offset = Offset_DayStart + (Time.time * SkyScrollSpeed / 200) % 1f;
-        SkyRend.material.mainTextureOffset = new Vector2(offset, 0);
+        offset = ( Time.time * SkyScrollSpeed ) % 1f;
+        SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
-        if(0.8f<offset && offset <= 0.9)
+        if(offset <= 0.4)
         {
-            // 저녁
-            if(GameState != State.SunSet) ChangeState_ToSunSet();
+            //Debug.Log("낮 " + offset);
+            //낮 
+            if (GameState != State.Day) ChangeStateToDay();
 
         }
-        else if (0.9 < offset && offset <= 1.3)
+        else if (offset <= 0.5)
         {
+            //Debug.Log("저녁 " + offset);
+            // 저녁
+            if (GameState != State.SunSet) ChangeState_ToSunSet();
+
+        }
+        else if (offset <= 0.9)
+        {
+            //Debug.Log("밤 " + offset);
             // 밤 
             if (GameState != State.Night) ChangeStateToNight();
         }
-        else if (1.3 < offset && offset <= 1.4)
+        else
         {
+            //Debug.Log("황혼 " + offset);
             //황혼 
             if (GameState != State.Twilight) ChangeState_ToTwilight();
         }
-        else
-        {
-            //낮 
-            if (GameState != State.Day) ChangeStateToDay();
-        }
-    }
-
-    /// <summary>
-    /// 5가 디폴트 
-    /// </summary>
-    void SetTimeSpeed(float speed)
-    {
-        SkyScrollSpeed = speed;
     }
 
     void ChangeStateToDay()
     {
-        Debug.Log("낮이 되었습니다~");
+        Debug.Log("낮이 되었습니다~"+ offset);
         GameState = State.Day;
         MapManager.instance.Start_ItemSpawnRepeatedly();
         MapManager.instance.Start_TileScrolling();
@@ -102,9 +107,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void ChangeState_ToSunSet()
     {
-        Debug.Log("저녁이 되었습니다~");
+        Debug.Log("저녁이 되었습니다~"+offset);
         GameState = State.SunSet;
-        SetTimeSpeed(2);
         MapManager.instance.Stop_ItemSpawnRepeatedly();
     }
 
@@ -112,27 +116,49 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 밤 : 전투 준비 + 몹 스폰 + 전투 진행
     /// </summary>
-    
-    // TODO : 캐릭터 달리기 모션 멈추기 
+
+
+   
+    // TODO : 몹 등장 -> 캐릭터가 조준
+    // TODO : 스페이스바를 누르면 화살 나감 -> 몹이 맞으면 피격 모션 -> 체력 바 닳기
+    // TODO : 몹 체력 0 되면 사망 모션 
     void ChangeStateToNight()
     {
-        Debug.Log("밤이 되었습니다~");
+        Debug.Log("밤이 되었습니다~"+ offset);
         GameState = State.Night;
-        SetTimeSpeed(5);
-        MapManager.instance.Stop_TileScrolling();
+        MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
+        playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
+        StartCoroutine(CameraMovetoAttack());
     }
 
     void ChangeState_ToTwilight()
     {
-        Debug.Log("새벽이 되었습니다~");
+        Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
     }
-
-
-
 
     void GameOver()
     {
         //게임오버 
+    }
+
+
+    /// <summary>
+    /// 1초동안 카메라를 공겨 모드 위치로 이동 
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CameraMovetoAttack()
+    {
+        float delta = 0;
+        float duration = 1f;
+        while (delta <= duration)
+        {
+            float t = delta / duration;
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraAttackModePos, t);
+            mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, Quaternion.Euler(cameraAttackModeAngle), t);
+
+            delta += Time.deltaTime;
+            yield return null;
+        }
     }
 }

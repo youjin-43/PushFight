@@ -48,11 +48,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Attack()
-    {
-        Debug.Log("Attack");
-        animator.SetTrigger("Attack");
-    }
 
     private void Jump()
     {
@@ -73,6 +68,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    public void StopRunning()
+    {
+        Debug.Log("StopRunning");
+        animator.SetBool("Combat", true);
+    }
+    private void Attack()
+    {
+        Debug.Log("Attack");
+        animator.SetTrigger("Attack");
+    }
 
 }
