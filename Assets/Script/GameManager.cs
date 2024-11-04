@@ -35,20 +35,26 @@ public class GameManager : MonoBehaviour
         GameOver
     }
 
-    [SerializeField] PlayerController playerController;
-    [SerializeField] GameObject mainCamera;
-    [SerializeField] Vector3 cameraAttackModePos = new Vector3(-3.5f,10f,-2.6f);
+    PlayerController playerController;
+
+    [Header("Camera Control")]
+    GameObject mainCamera;
+    [SerializeField] Vector3 cameraRunningModePos;
+    [SerializeField] Vector3 cameraRunningModeAngle;
+    [Space(4f)]
+    [SerializeField] Vector3 cameraAttackModePos = new Vector3(-3.5f,10f,-10f); 
     [SerializeField] Vector3 cameraAttackModeAngle = new Vector3(0.1f,179f,359f);
 
-    public State GameState = State.Day;
-
+    
+    [Space(10f)]
     [Header("TimeState Control")]
+    public State GameState = State.Day;
     [SerializeField] float SkyScrollSpeed = 0.02f;
     float Offset_DayStart = 0.7f;
     [SerializeField] Renderer SkyRend;
     [SerializeField] float offset;
 
-    [Header("TimeState Control")]
+    [Header("Monster")]
     public GameObject currentMonster;
 
     void Start()
@@ -59,6 +65,9 @@ public class GameManager : MonoBehaviour
 
         MapManager.instance.GenTiles();// 맵 생성 
         MapManager.instance.GenEnergy(); // 에너지 맵에 배치
+
+        cameraRunningModePos = mainCamera.transform.position;
+        cameraRunningModeAngle = mainCamera.transform.rotation.eulerAngles;
         ChangeStateToDay(); //처음 낮으로 게임 시작 
 
     }
@@ -104,6 +113,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("낮이 되었습니다~"+ offset);
         GameState = State.Day;
+        StartCoroutine(CameraMove(cameraRunningModePos, cameraRunningModeAngle)); //카메라 포지션, 각도 정상화 
         MapManager.instance.Start_ItemSpawnRepeatedly();
         MapManager.instance.Start_TileScrolling();
     }
@@ -132,7 +142,7 @@ public class GameManager : MonoBehaviour
         GameState = State.Night;
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
-        StartCoroutine(CameraMovetoAttack()); // 전투모드로 카메라 위치 이동
+        StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
         MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
         playerController.Aim(); // 캐릭터가 조준
 
@@ -183,15 +193,15 @@ public class GameManager : MonoBehaviour
     /// 1초동안 카메라를 공겨 모드 위치로 이동 
     /// </summary>
     /// <returns></returns>
-    IEnumerator CameraMovetoAttack()
+    IEnumerator CameraMove(Vector3 pos,Vector3 rotate)
     {
         float delta = 0;
         float duration = 1f;
         while (delta <= duration)
         {
             float t = delta / duration;
-            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraAttackModePos, t);
-            mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, Quaternion.Euler(cameraAttackModeAngle), t);
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, pos, t);
+            mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, Quaternion.Euler(rotate), t);
 
             delta += Time.deltaTime;
             yield return null;
