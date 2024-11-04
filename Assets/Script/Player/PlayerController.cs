@@ -12,9 +12,11 @@ public class PlayerController : MonoBehaviour
     
 
     Animator animator;
+    ItemPool ArrowPool;
 
     private void Start()
     {
+        ArrowPool = FindAnyObjectByType<ItemPool>();
         animator = GetComponent<Animator>();
         currentJumpCnt = 0;
     }
@@ -26,13 +28,20 @@ public class PlayerController : MonoBehaviour
         //float h = Input.GetAxis("Horizontal");
         //transform.Translate((new Vector3(h, 0, 0) * moveSpeed) * Time.deltaTime);
 
-        //점프
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            currentJumpCnt++;
-            Jump();
+            if(GameManager.instance.GameState != GameManager.State.Night)
+            {
+                //밤이 아닐때는 점프
+                currentJumpCnt++;
+                Jump();
 
-
+            }
+            else
+            {
+                //밤에는 공격
+                Attack();
+            }
         }   
 
     }
@@ -48,11 +57,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Attack()
-    {
-        Debug.Log("Attack");
-        animator.SetTrigger("Attack");
-    }
 
     private void Jump()
     {
@@ -73,6 +77,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void StopRunning()
+    {
+        Debug.Log("StopRunning");
+        animator.SetBool("Combat", true);
+    }
 
+    public void Aim()
+    {
+        Debug.Log("Aim");
+        animator.SetTrigger("Aim");
+    }
+
+    Vector3 arrowOffset = new Vector3(0, 1, -1);
+    private void Attack()
+    {
+        //Debug.Log("Attack");
+        animator.SetTrigger("Shot");
+        GameObject go = ArrowPool.GetArrowObj();
+        go.transform.position = transform.position+ arrowOffset; //화살을 플레이어 위치로 
+        // 화살이 활성화 되면 알아서 발사 됨 
+    }
 
 }

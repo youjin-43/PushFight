@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+
     //싱글턴으로
     public static MapManager instance; // 싱글톤을 할당할 전역 변수 -> 이 instance 자체는 게임 오브젝트를 얘기하는것 같고 
 
@@ -30,33 +32,12 @@ public class MapManager : MonoBehaviour
     public float scrollSpeed = 20f;
     [Space(10f)]
 
+
+    #region 타일 관련 
     //Tile 생성 
     public GameObject[] GroundTilesPrefab;
     GameObject[] GroundTiles;
     int tileCnt = 6;
-
-
-    #region 아이템 스폰 관련 변수들
-    [SerializeField]ItemPool itemPool; // 인스펙터에서 할당해줌 
-
-    [Header("Spawn - Limits")]
-    public float startPosX = 0;
-    public float topLimit = 15f;
-    public float downLimit = 7f;
-    [SerializeField] public float spawnPosZ = -180f; //대충 적당히 찍었는데 자연스러움ㅋㅋ 
-
-    [Header("Spawn - Energy")]
-    public float startSpawnRate = 10f;
-    float startPoint = -50f;
-    [SerializeField] int maxSpawnCnt_energy = 15;
-    [SerializeField] float spawnTime_energy = 0.3f; //0.3초마다 생성
-    [SerializeField] float timer_energy = 0;
-
-    [Header("Spawn - UpgradeItem")]
-    [SerializeField] float spawnTime_upgradeItem = 3f; //3초마다 생성
-    [SerializeField] float timer_upgradeItem = 0;
-    #endregion
-
 
     /// <summary>
     /// count 만큼 루프하면서 발판 생성
@@ -68,6 +49,49 @@ public class MapManager : MonoBehaviour
 
     }
 
+    #region 아이템 스폰 관련 변수들
+    [SerializeField]ItemPool itemPool; // 인스펙터에서 할당해줌 
+
+    [Header("Spawn - Limits")]
+    public float startPosX = 0;
+    public float topLimit = 15f;
+    public float downLimit = 7f;
+    [SerializeField] public float spawnPosZ; //대충 적당히 찍었는데 자연스러움ㅋㅋ 
+
+    [Header("Spawn - Energy")]
+    public float startSpawnRate = 10f;
+    float startPoint = -50f;
+    [SerializeField] int maxSpawnCnt_energy = 10;
+    [SerializeField] float spawnTime_energy = 0.3f; //0.3초마다 생성
+    [SerializeField] float timer_energy = 0;
+
+    [Header("Spawn - UpgradeItem")]
+    [SerializeField] float spawnTime_upgradeItem = 3f; //3초마다 생성
+    [SerializeField] float timer_upgradeItem = 0;
+    #endregion
+
+
+    #endregion
+
+    #region 몬스터 관련
+    //TODO : 나중에 보스도 추가
+    [Space(10f)]
+    [Header("Monster")]
+    public GameObject Monsters;
+    //public List<GameObject> Monsters_minion; // 쫄따구들 인스펙터에서 할당 
+
+
+    #endregion
+
+    private void Start()
+    {
+        
+        GroundTilesPrefab = Resources.LoadAll<GameObject>("GroundTile"); //타일 프리팹 리스트에 넣기
+        itemPool = FindObjectOfType<ItemPool>();
+        Monsters = GameObject.Find("Monsters");
+
+        spawnPosZ = -maxSpawnCnt_energy * startSpawnRate;
+    }
 
     /// <summary>
     /// 에너지를 맵에 쫘아아악 배치하는 함수 
@@ -180,6 +204,7 @@ public class MapManager : MonoBehaviour
             tile.GetComponent<TileScroll>().StartTileScolling();
         }
     }
+
 
 
 }
