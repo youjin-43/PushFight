@@ -17,7 +17,6 @@ public class MapManager : MonoBehaviour
             // instance가 비어있다면(null) 그곳에 자기 자신을 할당
             instance = this;
             Debug.Log("맵매니저가 생성됐습니다");
-            DontDestroyOnLoad(gameObject); // 씬이 변경되어도 삭제되지 않도록 
         }
         else
         {

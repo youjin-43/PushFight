@@ -144,6 +144,9 @@ public class GameManager : MonoBehaviour
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
         MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
+        UIManager.instance.MonsterHP_UI.SetActive(true); // HPUI 활성화 
+        UIManager.instance.MonsterHP_text.text = currentMonster.GetComponent<Monster>().Hp.ToString(); // HP text 셋팅
+
         playerController.Aim(); // 캐릭터가 조준
 
         

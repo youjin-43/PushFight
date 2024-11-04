@@ -9,7 +9,7 @@ public class Monster : MonoBehaviour
 
     [Header("INFO")]
     //TODO : 스테이지 지날떄마다 2배로 늘어나면 되려나?? 
-    int hp = 100;
+    public int Hp = 100;
     int damage;
     public bool isAlive;
 
@@ -46,6 +46,7 @@ public class Monster : MonoBehaviour
         {
             GetDamage(damage);
             animator.SetTrigger("Hit");
+            UIManager.instance.ShowDamageUI(damage);
         }
     }
 
@@ -53,9 +54,10 @@ public class Monster : MonoBehaviour
     // TODO : 체력 바 닳기 -> 체력 바 말고 텍스트로 크게 써놓고 랜덤위치에 -damage 나오도록 해야겠다
     void GetDamage(int n)
     {
-        hp -= n;
-        Debug.Log("남은 HP : " + hp);
-        if (hp < 0) Death();
+        Hp -= n;
+        Debug.Log("남은 HP : " + Hp);
+        UIManager.instance.MonsterHP_text.text = Hp.ToString(); // HP text 셋팅
+        if (Hp < 0) Death();
     }
 
 
