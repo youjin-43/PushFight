@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
             // instance가 비어있다면(null) 그곳에 자기 자신을 할당
             instance = this;
             Debug.Log("게임매니저가 생성됐습니다");
+
+
+            //TODO : 맵 매니저랑 게임 매니저 이거 없어도 될것 같은데?
             DontDestroyOnLoad(gameObject); // 씬이 변경되어도 삭제되지 않도록 
         }
         else
@@ -56,12 +59,11 @@ public class GameManager : MonoBehaviour
         MapManager.instance.GenEnergy(); // 에너지 맵에 배치
         ChangeStateToDay(); //처음 낮으로 게임 시작 
 
-
-
     }
    
     void Update()
     {
+
         offset = ( Time.time * SkyScrollSpeed ) % 1f;
         SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
@@ -93,6 +95,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
+    // TODO : 카메라 포지션, 각도 정상화 
     void ChangeStateToDay()
     {
         Debug.Log("낮이 되었습니다~"+ offset);
@@ -110,25 +115,24 @@ public class GameManager : MonoBehaviour
         Debug.Log("저녁이 되었습니다~"+offset);
         GameState = State.SunSet;
         MapManager.instance.Stop_ItemSpawnRepeatedly();
-    }
 
+    }
+     
 
     /// <summary>
     /// 밤 : 전투 준비 + 몹 스폰 + 전투 진행
     /// </summary>
-
-
-   
-    // TODO : 몹 등장 -> 캐릭터가 조준
-    // TODO : 스페이스바를 누르면 화살 나감 -> 몹이 맞으면 피격 모션 -> 체력 바 닳기
-    // TODO : 몹 체력 0 되면 사망 모션 
     void ChangeStateToNight()
     {
         Debug.Log("밤이 되었습니다~"+ offset);
         GameState = State.Night;
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
-        StartCoroutine(CameraMovetoAttack());
+        StartCoroutine(CameraMovetoAttack()); // 전투모드로 카메라 위치 이동
+        MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
+        playerController.Aim(); // 캐릭터가 조준
+                                                                                               // TODO : 스페이스바를 누르면 화살 나감 -> 몹이 맞으면 피격 모션 -> 체력 바 닳기
+                                                                                               // TODO : 몹 체력 0 되면 사망 모션 
     }
 
     void ChangeState_ToTwilight()
