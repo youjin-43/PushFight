@@ -77,6 +77,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    public void StartRunninng()
+    {
+        Debug.Log("StopRunning");
+        animator.SetBool("Combat", false);
+    }
+
     public void StopRunning()
     {
         Debug.Log("StopRunning");
@@ -99,4 +106,9 @@ public class PlayerController : MonoBehaviour
         // 화살이 활성화 되면 알아서 발사 됨 
     }
 
+    public void Victory()
+    {
+        Debug.Log("Victory!");
+        animator.SetTrigger("Victory");
+    }
 }

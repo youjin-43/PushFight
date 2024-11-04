@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
    
     void Update()
     {
-
+        //todo : 시간이 흐를 때 안 흐를떄를 제어하는 변수하나 만들어서 안흐를 때는 offset이 증가하지 않도록 해도 될것 같음 
         offset = ( Time.time * SkyScrollSpeed ) % 1f;
         SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
@@ -97,6 +97,8 @@ public class GameManager : MonoBehaviour
             //Debug.Log("밤 " + offset);
             // 밤 
             if (GameState != State.Night) ChangeStateToNight();
+
+            //todo : 밤이 끝나기 전에 일찍 몹을 죽인경우 새벽으로 빠르게 타임 워프 해야함 
         }
         else
         {
@@ -106,9 +108,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
-    // TODO : 카메라 포지션, 각도 정상화 
     void ChangeStateToDay()
     {
         Debug.Log("낮이 되었습니다~"+ offset);
@@ -116,6 +115,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CameraMove(cameraRunningModePos, cameraRunningModeAngle)); //카메라 포지션, 각도 정상화 
         MapManager.instance.Start_ItemSpawnRepeatedly();
         MapManager.instance.Start_TileScrolling();
+        //todo : 이거 잘 되는지 확인 해야함! 
+        playerController.StartRunninng();// 플레이어 다시 달리기 시작
+
     }
 
 
@@ -171,19 +173,27 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // TODO : 죽이면 빅토리 뜨고 플레이어가 뒤돌며 승리 모션
-            // todo : 보상선택 
             Debug.Log("몹을 죽이는데 성공했습니다");
-
+            StartCoroutine(VictoryRoutine());            
         }
-
-
-
-
     }
 
 
+    IEnumerator VictoryRoutine()
+    {
+        UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
+        currentMonster.gameObject.SetActive(false);// TODO : 몬스터 씬에서 없애고 -> 아 이거 페이드 아웃으로 하고 싶은데...
+        UIManager.instance.Victory_UI.GetComponent<VictoryUI>().ShowVictoryUI(); //빅토리 뜨고
+        playerController.Victory(); // TODO : 플레이어가 뒤돌며 승리 모션
+        Invoke("CloseVictoryUI", 1f); //1초뒤에 빅토리 끄고 
+        // todo : 보상선택 
+        yield return null;
+    }
 
+    void CloseVictoryUI()
+    {
+        UIManager.instance.Victory_UI.GetComponent<VictoryUI>().SetCloseTrigger();
+    }
     // TODO : 게임 오버 구현 
     void GameOver()
     {

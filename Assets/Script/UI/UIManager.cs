@@ -27,7 +27,9 @@ public class UIManager : MonoBehaviour
     }
 
     public GameObject MonsterHP_UI; //인스펙터에서 할당 
-    public TextMeshProUGUI MonsterHP_text; //인스펙터에서 할당 
+    public TextMeshProUGUI MonsterHP_text; //인스펙터에서 할당
+
+    public GameObject Victory_UI; //인스펙터에서 할당 
 
     [Header("DamageText")]
     public GameObject DamagetextPrefab; //인스펙터에서 할당 
@@ -75,4 +77,7 @@ public class UIManager : MonoBehaviour
         d.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-380,315), Random.Range(73,350)); 
         d.GetComponent<TextMeshProUGUI>().text = "-" + damage.ToString();
     }
+
+
+
 }
