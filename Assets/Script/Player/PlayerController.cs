@@ -89,13 +89,11 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Aim");
     }
 
-
-    //todo : 플레이어 공격모션 설정 
     Vector3 arrowOffset = new Vector3(0, 1, -1);
     private void Attack()
     {
         //Debug.Log("Attack");
-        //animator.SetTrigger("Attack");
+        animator.SetTrigger("Shot");
         GameObject go = ArrowPool.GetArrowObj();
         go.transform.position = transform.position+ arrowOffset; //화살을 플레이어 위치로 
         // 화살이 활성화 되면 알아서 발사 됨 

@@ -148,17 +148,18 @@ public class GameManager : MonoBehaviour
         //몹을 죽였는지 확인
         if (currentMonster.GetComponent<Monster>().isAlive)
         {
-            //todo : 몹을 죽이지 못한경우 -> 남은 몹 채력 만큼 에너지 소비
+            //몹을 죽이지 못한경우 
+            //todo : 남은 몹 채력 만큼 에너지 소비
 
             //todo : 에너지를 다 썼는데도 죽이지 못했다면 게임 오버 
-
 
             //todo : 그랬는데도 죽이지 못한경우 몹이 플레이어를 공격하며 게임 오버
             GameOver();
         }
         else
         {
-            // todo : 몹을 죽인경우 -> 보상 선택 
+            // TODO : 죽이면 빅토리 뜨고 플레이어가 뒤돌며 승리 모션
+            // todo : 보상선택 
             Debug.Log("몹을 죽이는데 성공했습니다");
 
         }

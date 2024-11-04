@@ -4,7 +4,7 @@ public class Monster : MonoBehaviour
 {
 
     
-    // TODO : 죽이면 빅토리 뜨고 플레이어가 뒤돌며 승리 모션
+  
 
 
     [Header("INFO")]
