@@ -160,7 +160,17 @@ public class GameManager : MonoBehaviour
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
-        MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
+
+        //todo : 몬스터 등장 
+        if (stage > 5)
+        {
+            MapManager.instance.Monsters.transform.GetChild(4).gameObject.SetActive(true); // 몬스터 등장
+        }
+        else
+        {
+            MapManager.instance.Monsters.transform.GetChild(stage-1).gameObject.SetActive(true); // 몬스터 등장
+        }
+       
         UIManager.instance.MonsterHP_text.text = currentMonster.Hp.ToString(); // HP text 셋팅
         playerController.Aim(); // 캐릭터가 조준
     }
@@ -206,7 +216,7 @@ public class GameManager : MonoBehaviour
 
         TimeRunning = false;//시간 잠시 멈춤 
 
-        float timer = 0.1f; //0,1초마다 닳음
+        float timer = 0.05f; //0,1초마다 닳음
         float delta = 0;
 
         while (currentMonster.isAlive && PlayerInfo.instance.energeCnt>0) 
