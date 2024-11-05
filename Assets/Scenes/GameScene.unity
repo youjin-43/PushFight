@@ -547,14 +547,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2e7cc65cfdd4e1fb4ccb7b47d7bc73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnergeItemPoolCnt: 20
+  EnergeItemPoolCnt: 25
   EnergeItemPool: {fileID: 383077153}
   EnergePrefab: {fileID: 8411062225389914564, guid: a9f55b13f425148dda6598ab868aca7e, type: 3}
   energeObjs: []
   ItemPrefabs:
   - {fileID: 894215939931545293, guid: 6e44f609ac12243a197d6341ac70cb3d, type: 3}
   - {fileID: 8816352745581931424, guid: 5bc9094bd48b1445cb64737da8864344, type: 3}
-  spawnCnt: 0600000004000000
+  spawnCnt: 0300000007000000
   UpgradeItemPool: {fileID: 916355197}
   ItemObjs: []
   ArrowrePrefabs: {fileID: 7100457233815698877, guid: 3974368118e7b4e5eaa3919b2fc80564, type: 3}
@@ -2123,7 +2123,7 @@ MonoBehaviour:
   offset: 0
   stage: 0
   currentMonster: {fileID: 0}
-  DamageSum: 0
+  PushCnt: 0
 --- !u!82 &756672340
 AudioSource:
   m_ObjectHideFlags: 0

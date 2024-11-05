@@ -58,7 +58,7 @@ public class Monster : MonoBehaviour
     public void GetDamage(int n)
     {
         Hp -= n;
-        GameManager.instance.DamageSum += n;
+        GameManager.instance.PushCnt++;
         Debug.Log("남은 HP : " + Hp);
         UIManager.instance.MonsterHP_text.text = Hp.ToString(); // HP text 셋팅
         if (Hp <= 0) Death();

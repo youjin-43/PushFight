@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     public Monster currentMonster;
 
     [Header("GameOver")]
-    public int DamageSum = 0;
+    public int PushCnt = 0;
 
 
     void Start()
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
                 if (GameState != State.SunSet) ChangeState_ToSunSet();
 
             }
-            else if (offset <= 0.99)
+            else if (offset <= 0.95)
             {
                 //Debug.Log("밤 " + offset);
                 if (GameState != State.Night) ChangeStateToNight();

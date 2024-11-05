@@ -15,7 +15,7 @@ public class ItemPool : MonoBehaviour
     [Space(10f)]
     [Header("UpgradeItem")]
     public GameObject[] ItemPrefabs;
-    [SerializeField] int[] spawnCnt = { 6, 4 }; //ItemPrefabs에 있는 아이템 별 몇개 생성해놓을건지 
+    [SerializeField] int[] spawnCnt = { 3, 7 }; //ItemPrefabs에 있는 아이템 별 몇개 생성해놓을건지 
     [SerializeField] GameObject UpgradeItemPool;
     public List<GameObject> ItemObjs;
 

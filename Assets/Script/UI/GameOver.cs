@@ -9,7 +9,7 @@ public class GameOver : MonoBehaviour
     private void OnEnable()
     {
         stageInfo.text += GameManager.instance.stage;
-        DamageInfo.text += GameManager.instance.DamageSum;
+        DamageInfo.text += GameManager.instance.PushCnt;
 
         Invoke("ShowStageInfo", 1f);
         Invoke("ShowDamageInfo", 1f);
