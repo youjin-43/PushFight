@@ -238,6 +238,7 @@ MonoBehaviour:
   DjumpPower: 10
   jumpMaxCnt: 2
   currentJumpCnt: 0
+  isChagealble: 1
 --- !u!54 &80310496
 Rigidbody:
   m_ObjectHideFlags: 0
