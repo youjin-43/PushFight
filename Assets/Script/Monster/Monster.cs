@@ -22,7 +22,7 @@ public class Monster : MonoBehaviour
     }
     private void OnEnable()
     {
-        Hp = GameManager.instance.stage * 150; // 스테이지 마다 n배로 체력 증가  
+        Hp = GameManager.instance.stage * 300; // 스테이지 마다 n배로 체력 증가  
         damage = PlayerInfo.instance.attackCnt;//플레이어 인포에서 데미지를 가져옴 
         transform.position = new Vector3(0, 20f, -62); //소환!
         GameManager.instance.currentMonster = this; // 현재 스테이지 몬스터로 지정 
@@ -56,13 +56,12 @@ public class Monster : MonoBehaviour
     public void GetDamage(int n)
     {
         Hp -= n;
+        GameManager.instance.DamageSum += n;
         Debug.Log("남은 HP : " + Hp);
         UIManager.instance.MonsterHP_text.text = Hp.ToString(); // HP text 셋팅
         if (Hp <= 0) Death();
     }
 
-
-    //TODO : 페이드 아웃으로 사라지게 하고 싶은데 되려나?
     void Death()
     {
         Debug.Log("몬스터 죽음!");

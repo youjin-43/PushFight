@@ -14,7 +14,7 @@ public class DamageText : MonoBehaviour
     {    
         alpha = text.color;
         alpha.a = 100; //전에 알파 0으로 해놔서 활성화 될때 초기화
-        //todo : 이거 수치로 조정 안되서 그냥 씬에서 오브젝트 풀 위치 자체를 옮겼는데 수치로 랜덤 배치는 어케하지? 
+        //이거 수치로 조정 안되서 그냥 씬에서 오브젝트 풀 위치 자체를 옮겼는데 수치로 랜덤 배치는 어케하지? -> 부모 리엑트 문제였음 그거 자체를 내림 
         GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-380, 315), Random.Range(-120, 150));
         Invoke("DisableObject", disableTime);
     }
