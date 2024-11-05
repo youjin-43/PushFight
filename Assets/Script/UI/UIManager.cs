@@ -89,7 +89,10 @@ public class UIManager : MonoBehaviour
     public void CloseVictoryUI()
     {
         Victory_UI.SetActive(false);
-        GameManager.instance.TimeRunning = true; 
+        GameManager.instance.TimeRunning = true;
+        //GameManager.instance.TimeJumptoTwilight();
+        //Todo : jump to twilight
+        if (GameManager.instance.GameState != GameManager.State.Twilight) GameManager.instance.SkyScrollSpeed = 0.08f;
     }
 
 

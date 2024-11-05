@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
     {
         if (currentJumpCnt <= jumpMaxCnt)
         {
+            SoundManager.instance.PlayJumpSound();
             if (currentJumpCnt==1) // 1단점프
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour
     [Header("TimeState Control")]
     public bool TimeRunning = true;
     public State GameState = State.Day;
-    [SerializeField] float SkyScrollSpeed = 0.03f;
+    public float SkyScrollSpeed = 0.02f;
     float Offset_DayStart = 0.7f; 
 
     Renderer SkyRend;
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
     public Monster currentMonster;
 
     [Header("GameOver")]
-    public int DamageSum = 0;
+    public int PushCnt = 0;
 
 
     void Start()
@@ -88,19 +89,19 @@ public class GameManager : MonoBehaviour
             if (offset > 1) offset = 0;
             SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
-            if (offset <= 0.45f)
+            if (offset <= 0.48f)
             {
                 //Debug.Log("낮 " + offset);
                 if (GameState != State.Day) ChangeStateToDay();
 
             }
-            else if (offset <= 0.5)
+            else if (offset <= 0.53)
             {
                 //Debug.Log("저녁 " + offset);
                 if (GameState != State.SunSet) ChangeState_ToSunSet();
 
             }
-            else if (offset <= 0.9)
+            else if (offset <= 0.95)
             {
                 //Debug.Log("밤 " + offset);
                 if (GameState != State.Night) ChangeStateToNight();
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
     void ChangeStateToDay()
     {
         Debug.Log("낮이 되었습니다~"+ offset);
+        SoundManager.instance.PlayDayBGM();
         GameState = State.Day;
         stage++;
 
@@ -128,7 +130,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    // todo : 몹 나온다고 경고 
+    
     /// <summary>
     /// 저녁 : 아이템 스폰이 멈춤 
     /// </summary>
@@ -138,6 +140,7 @@ public class GameManager : MonoBehaviour
         GameState = State.SunSet;
         MapManager.instance.Stop_ItemSpawnRepeatedly();
         UIManager.instance.WarningUI.SetActive(true);
+        SoundManager.instance.PlayBattleBGM();//배틀브금 시작  // todo : 아니 여기서 왤케 렉이 걸리지? 
     }
 
 
@@ -153,6 +156,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.WarningUI.SetActive(false);
 
         //ReadyToFight
+        
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
@@ -167,7 +171,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator VictoryRoutine()
     {
         TimeRunning = false; //잠시 게임 정지
-
+        SoundManager.instance.PlayVictoryBGM();
         UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
         currentMonster.gameObject.SetActive(false);// 몬스터 씬에서 없애고
         playerController.Victory(); // 플레이어가 뒤돌며 승리 모션
@@ -175,22 +179,11 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
-    /// <summary>
-    /// 새벽까지 빠르게 타임 이동 
-    /// </summary>
-    public void TimeJumptoTwilight()
-    {
-        while(GameState != State.Twilight)
-        {
-            SkyScrollSpeed = 0.08f;
-        }
-        SkyScrollSpeed = 0.03f;
-    }
-
     void ChangeState_ToTwilight()
     {
         Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
+        SkyScrollSpeed = 0.02f; //Todo : 확인 
 
         //몹을 죽였는지 확인
         if (currentMonster.isAlive)
@@ -233,9 +226,6 @@ public class GameManager : MonoBehaviour
         {
             GameOver(); //에너지를 다 썼는데도 죽이지 못했다면 게임 오버
         }
-        else{
-            TimeRunning = true;//시간 다시 ㄱㄱ 
-        }
         yield return null;
     }
 
@@ -269,7 +259,13 @@ public class GameManager : MonoBehaviour
     {
         //게임오버
         Debug.Log("GameOver");
+        SoundManager.instance.PlayGameOverSound();
         UIManager.instance.GameOverUI.SetActive(true);
 
+    }
+
+    public void GameRestart()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }

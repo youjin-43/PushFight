@@ -54,7 +54,7 @@ public class MapManager : MonoBehaviour
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-    [SerializeField] public float spawnPosZ = -165; //직접 지정 해줘야함 
+    [SerializeField] public float spawnPosZ = -80; //직접 지정 해줘야함 
 
 
     [Header("Spawn - Energy")]
@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] float timer_energy = 0;
 
     [Header("Spawn - UpgradeItem")]
-    [SerializeField] float spawnTime_upgradeItem = 3f; //3초마다 생성
+    [SerializeField] float spawnTime_upgradeItem = 3.5f; //3초마다 생성
     [SerializeField] float timer_upgradeItem = 0;
     #endregion
 
