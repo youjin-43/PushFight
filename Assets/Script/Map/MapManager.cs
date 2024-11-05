@@ -17,7 +17,6 @@ public class MapManager : MonoBehaviour
             // instance가 비어있다면(null) 그곳에 자기 자신을 할당
             instance = this;
             Debug.Log("맵매니저가 생성됐습니다");
-            DontDestroyOnLoad(gameObject); // 씬이 변경되어도 삭제되지 않도록 
         }
         else
         {
@@ -46,7 +45,6 @@ public class MapManager : MonoBehaviour
     {
         GroundTiles = new GameObject[tileCnt];
         for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i % 3], new Vector3(0, 0, -100 * i), Quaternion.identity);
-
     }
 
     #region 아이템 스폰 관련 변수들
@@ -56,12 +54,13 @@ public class MapManager : MonoBehaviour
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-    [SerializeField] public float spawnPosZ; //대충 적당히 찍었는데 자연스러움ㅋㅋ 
+    [SerializeField] public float spawnPosZ = -165; //직접 지정 해줘야함 
+
 
     [Header("Spawn - Energy")]
     public float startSpawnRate = 10f;
     float startPoint = -50f;
-    [SerializeField] int maxSpawnCnt_energy = 10;
+    [SerializeField] int maxSpawnCnt_energy = 13;
     [SerializeField] float spawnTime_energy = 0.3f; //0.3초마다 생성
     [SerializeField] float timer_energy = 0;
 
@@ -74,7 +73,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region 몬스터 관련
-    //TODO : 나중에 보스도 추가
+    //TODO : 몬스터 추가 추가
     [Space(10f)]
     [Header("Monster")]
     public GameObject Monsters;
@@ -89,8 +88,6 @@ public class MapManager : MonoBehaviour
         GroundTilesPrefab = Resources.LoadAll<GameObject>("GroundTile"); //타일 프리팹 리스트에 넣기
         itemPool = FindObjectOfType<ItemPool>();
         Monsters = GameObject.Find("Monsters");
-
-        spawnPosZ = -maxSpawnCnt_energy * startSpawnRate;
     }
 
     /// <summary>

@@ -42,15 +42,21 @@ public class PlayerInfo : MonoBehaviour
         AttackText.text = attackCnt.ToString();
     }
 
-    public void IncreseEnergeCnt()
+    public void IncreseEnergeCnt(int n)
     {
-        energeCnt++;
+        energeCnt+=n;
         EnergyText.text = energeCnt.ToString();
     }
 
-    public void IncreseAttackCnt()
+    public void IncreseAttackCnt(int n)
     {
-        attackCnt++;
+        attackCnt+=n;
         AttackText.text = attackCnt.ToString();
+    }
+
+    public void DecreaseEnergeCnt()
+    {
+        energeCnt--;
+        EnergyText.text = energeCnt.ToString();
     }
 }
