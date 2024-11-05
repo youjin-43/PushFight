@@ -55,12 +55,12 @@ public class MapManager : MonoBehaviour
     public float startPosX = 0;
     public float topLimit = 15f;
     public float downLimit = 7f;
-    [SerializeField] public float spawnPosZ; //대충 적당히 찍었는데 자연스러움ㅋㅋ 
+    [SerializeField] public float spawnPosZ = -165; //직접 지정 해줘야함 
 
     [Header("Spawn - Energy")]
     public float startSpawnRate = 10f;
     float startPoint = -50f;
-    [SerializeField] int maxSpawnCnt_energy = 10;
+    [SerializeField] int maxSpawnCnt_energy = 13;
     [SerializeField] float spawnTime_energy = 0.3f; //0.3초마다 생성
     [SerializeField] float timer_energy = 0;
 
@@ -88,8 +88,6 @@ public class MapManager : MonoBehaviour
         GroundTilesPrefab = Resources.LoadAll<GameObject>("GroundTile"); //타일 프리팹 리스트에 넣기
         itemPool = FindObjectOfType<ItemPool>();
         Monsters = GameObject.Find("Monsters");
-
-        spawnPosZ = -maxSpawnCnt_energy * startSpawnRate;
     }
 
     /// <summary>

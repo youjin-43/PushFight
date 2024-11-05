@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     public void StartRunninng()
     {
-        Debug.Log("StopRunning");
+        Debug.Log("StartRunninng");
         animator.SetBool("Combat", false);
     }
 

@@ -53,9 +53,11 @@ public class GameManager : MonoBehaviour
     float Offset_DayStart = 0.7f;
     [SerializeField] Renderer SkyRend;
     [SerializeField] float offset;
+    [SerializeField] float offset2;
 
     [Header("Monster")]
-    public GameObject currentMonster;
+    public int stage=0;
+    public Monster currentMonster;
 
     void Start()
     {
@@ -112,6 +114,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("낮이 되었습니다~"+ offset);
         GameState = State.Day;
+        stage++;
+
         StartCoroutine(CameraMove(cameraRunningModePos, cameraRunningModeAngle)); //카메라 포지션, 각도 정상화 
         MapManager.instance.Start_ItemSpawnRepeatedly();
         MapManager.instance.Start_TileScrolling();
@@ -142,64 +146,81 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("밤이 되었습니다~"+ offset);
         GameState = State.Night;
+
+        //ReadyToFight
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
         MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
-        UIManager.instance.MonsterHP_UI.SetActive(true); // HPUI 활성화 
-        UIManager.instance.MonsterHP_text.text = currentMonster.GetComponent<Monster>().Hp.ToString(); // HP text 셋팅
+        UIManager.instance.MonsterHP_text.text = currentMonster.Hp.ToString(); // HP text 셋팅
 
         playerController.Aim(); // 캐릭터가 조준
-
-        
     }
 
+
+
+    //몬스터 스크립트에서 몬스터가 죽으면 실행됨 
+    public IEnumerator VictoryRoutine()
+    {
+        UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
+        currentMonster.gameObject.SetActive(false);// TODO : 몬스터 씬에서 없애고 -> 아 이거 페이드 아웃으로 하고 싶은데...
+        UIManager.instance.Victory_UI.GetComponent<VictoryUI>().ShowVictoryUI(); //빅토리 뜨고 
+        playerController.Victory(); // TODO : 플레이어가 뒤돌며 승리 모션
+        Invoke("CloseVictoryUI", 3f); //3초뒤에 빅토리 끄고 
+        // todo : 보상선택 - 잠깐 타임 스케일 0
+        // todo : 빅토리랑 보상을 같이 하도록 바꿔야겠다 
+
+        yield return null;
+    }
 
     void ChangeState_ToTwilight()
     {
         Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
+        //if (SkyScrollSpeed != 0.02) SkyScrollSpeed /= 2;//몹 죽였을때 빨라지게 했던 스크롤 스피드 정상화 
 
         //몹을 죽였는지 확인
-        if (currentMonster.GetComponent<Monster>().isAlive)
+        if (currentMonster.isAlive)
         {
             //몹을 죽이지 못한경우 
-            //todo : 남은 몹 채력 만큼 에너지 소비
-
-            //todo : 에너지를 다 썼는데도 죽이지 못했다면 게임 오버 
-
-            //todo : 그랬는데도 죽이지 못한경우 몹이 플레이어를 공격하며 게임 오버
-            GameOver();
+            StartCoroutine("UseEnergy"); //남은 몹 채력 만큼 에너지 소비
+            if (currentMonster.isAlive) GameOver(); //에너지를 다 썼는데도 죽이지 못했다면 게임 오버
         }
         else
         {
             Debug.Log("몹을 죽이는데 성공했습니다");
-            StartCoroutine(VictoryRoutine());            
+            
         }
     }
 
 
-    IEnumerator VictoryRoutine()
+    //todo : 에너지가 부족한경우 
+    IEnumerator UseEnergy()
     {
-        UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
-        currentMonster.gameObject.SetActive(false);// TODO : 몬스터 씬에서 없애고 -> 아 이거 페이드 아웃으로 하고 싶은데...
-        UIManager.instance.Victory_UI.GetComponent<VictoryUI>().ShowVictoryUI(); //빅토리 뜨고
-        playerController.Victory(); // TODO : 플레이어가 뒤돌며 승리 모션
-        Invoke("CloseVictoryUI", 1f); //1초뒤에 빅토리 끄고 
-        // todo : 보상선택 
+        float timer = 0.1f; //0,1초마다 닳음
+        float delta = 0;
+        while (currentMonster.Hp > 0)
+        {
+            delta += Time.deltaTime;
+            if(delta> timer)
+            {
+                delta = 0;
+                PlayerInfo.instance.DecreaseEnergeCnt();
+                currentMonster.GetDamage(1);
+            }
+            yield return null;
+        }
+
         yield return null;
     }
+
+
 
     void CloseVictoryUI()
     {
         UIManager.instance.Victory_UI.GetComponent<VictoryUI>().SetCloseTrigger();
     }
-    // TODO : 게임 오버 구현 
-    void GameOver()
-    {
-        //게임오버
-        Debug.Log("GameOver");
-    }
+
 
 
     /// <summary>
@@ -209,7 +230,7 @@ public class GameManager : MonoBehaviour
     IEnumerator CameraMove(Vector3 pos,Vector3 rotate)
     {
         float delta = 0;
-        float duration = 1f;
+        float duration = 1.5f;
         while (delta <= duration)
         {
             float t = delta / duration;
@@ -219,5 +240,17 @@ public class GameManager : MonoBehaviour
             delta += Time.deltaTime;
             yield return null;
         }
+    }
+
+
+
+
+
+    // TODO : 게임 오버 구현 
+    void GameOver()
+    {
+        //게임오버
+        Debug.Log("GameOver");
+        UIManager.instance.GameOverUI.SetActive(true);
     }
 }

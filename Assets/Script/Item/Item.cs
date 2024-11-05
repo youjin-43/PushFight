@@ -7,7 +7,7 @@ public class Item : MonoBehaviour
     Coroutine coroutine;
 
     /// <summary>
-    /// 1은 에너지, 2는 공격, 3은 증강 
+    /// 1은 에너지, 2는 공격, 3은 증강 -> 그냥 10개짜리 에너지로 해야겠다 
     /// </summary>
     [SerializeField] int type; //인스펙터에서 할당
 
@@ -43,10 +43,13 @@ public class Item : MonoBehaviour
             switch (type)
             {
                 case 1:
-                    other.GetComponent<PlayerInfo>().IncreseEnergeCnt();
+                    PlayerInfo.instance.IncreseEnergeCnt(1);
                     break;
                 case 2:
-                    other.GetComponent<PlayerInfo>().IncreseAttackCnt();
+                    PlayerInfo.instance.IncreseAttackCnt(1);
+                    break;
+                case 3:
+                    PlayerInfo.instance.IncreseEnergeCnt(10);
                     break;
                 default:
                     break;

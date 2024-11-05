@@ -6,14 +6,17 @@ public class DamageText : MonoBehaviour
 {
     private float moveSpeed = 32.0f;
     private float alphaSpeed = 2.0f;
-    private float destroyTime = 2.0f;
+    private float disableTime = 2.0f;
     [SerializeField] TextMeshProUGUI text; //인스펙터에서 할당 
     Color alpha;
 
     void OnEnable()
     {    
         alpha = text.color;
-        Invoke("DisableObject", destroyTime);
+        alpha.a = 100; //전에 알파 0으로 해놔서 활성화 될때 초기화
+        //todo : 이거 수치로 조정 안되서 그냥 씬에서 오브젝트 풀 위치 자체를 옮겼는데 수치로 랜덤 배치는 어케하지? 
+        GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-380, 315), Random.Range(-120, 150));
+        Invoke("DisableObject", disableTime);
     }
 
     void Update()
