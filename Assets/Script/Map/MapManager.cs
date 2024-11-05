@@ -57,6 +57,9 @@ public class MapManager : MonoBehaviour
     public float downLimit = 7f;
     [SerializeField] public float spawnPosZ = -165; //직접 지정 해줘야함 
 
+
+
+    // todo : 아이템 초반에만 중복 생성되는거 해결해야함 
     [Header("Spawn - Energy")]
     public float startSpawnRate = 10f;
     float startPoint = -50f;

@@ -28,9 +28,10 @@ public class UIManager : MonoBehaviour
 
     public GameObject MonsterHP_UI; //인스펙터에서 할당 
     public TextMeshProUGUI MonsterHP_text; //인스펙터에서 할당
+    public GameObject Victory_UI; //인스펙터에서 할당
     public GameObject GameOverUI;//인스펙터에서  할당 
 
-    public GameObject Victory_UI; //인스펙터에서 할당 
+    
 
     [Header("DamageText")]
     public GameObject DamagetextPrefab; //인스펙터에서 할당 
@@ -78,6 +79,16 @@ public class UIManager : MonoBehaviour
         d.GetComponent<TextMeshProUGUI>().text = "-" + damage.ToString();
     }
 
+    public void ShowVictoryUI()
+    {
+        Victory_UI.SetActive(true);
+    }
+
+    public void CloseVictoryUI()
+    {
+        Victory_UI.SetActive(false);
+        GameManager.instance.TimeRunning = true; // 증강선택 후에는 시간이 다시 흐르도록 
+    }
 
 
 }

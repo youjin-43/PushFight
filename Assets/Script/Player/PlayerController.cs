@@ -111,4 +111,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Victory!");
         animator.SetTrigger("Victory");
     }
+
+
+    public void IncreasejumpMaxCnt()
+    {
+        jumpMaxCnt++;
+    }
 }
