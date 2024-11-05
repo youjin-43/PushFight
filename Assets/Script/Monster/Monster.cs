@@ -25,7 +25,7 @@ public class Monster : MonoBehaviour
     private void OnEnable()
     {
         int tmp = GameManager.instance.stage;
-        Hp = 300 + tmp * tmp * 100; // 스테이지 마다 n배로 체력 증가  
+        Hp = 200 + tmp * tmp * 150; // 스테이지 마다 n배로 체력 증가  
         damage = PlayerInfo.instance.attackCnt;//플레이어 인포에서 데미지를 가져옴 
         transform.position = new Vector3(0, 20f, -62); //소환!
         GameManager.instance.currentMonster = this; // 현재 스테이지 몬스터로 지정 

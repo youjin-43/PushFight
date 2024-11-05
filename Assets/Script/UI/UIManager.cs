@@ -30,7 +30,8 @@ public class UIManager : MonoBehaviour
     public GameObject MonsterHP_UI; //인스펙터에서 할당 
     public TextMeshProUGUI MonsterHP_text; //인스펙터에서 할당
     public GameObject Victory_UI; //인스펙터에서 할당
-    public GameObject GameOverUI;//인스펙터에서  할당 
+    public GameObject GameOverUI;//인스펙터에서  할당
+    public GameObject PauseUI;
 
     
 
@@ -51,6 +52,28 @@ public class UIManager : MonoBehaviour
             DamagetextObjs.Add(go);
             go.SetActive(false);
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (PauseUI.activeSelf)
+            {
+                DisablePause();
+            }
+            else
+            {
+                PauseUI.SetActive(true);
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    public void DisablePause()
+    {
+        PauseUI.SetActive(false);
+        Time.timeScale = 1;
     }
 
     /// <summary>

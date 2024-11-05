@@ -267,5 +267,6 @@ public class GameManager : MonoBehaviour
     public void GameRestart()
     {
         SceneManager.LoadScene("GameScene");
+        Time.timeScale = 1;
     }
 }
