@@ -84,10 +84,16 @@ public class UIManager : MonoBehaviour
         Victory_UI.SetActive(true);
     }
 
+    //증강 버튼에 할당돼있음 
     public void CloseVictoryUI()
     {
         Victory_UI.SetActive(false);
-        GameManager.instance.TimeRunning = true; // 증강선택 후에는 시간이 다시 흐르도록 
+        
+        // TODO : 증강선택 후에도 아직 밤이 끝나지 않았다면 새벽으로 바로 넘어감
+        // TODO : 아예 게임 시작을 새벽으로 해서 거기로 초기화 시키도록 할까?
+
+
+        GameManager.instance.TimeRunning = true; 
     }
 
 

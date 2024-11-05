@@ -49,8 +49,10 @@ public class GameManager : MonoBehaviour
     [Header("TimeState Control")]
     public bool TimeRunning = true;
     public State GameState = State.Day;
-    [SerializeField] float SkyScrollSpeed = 0.02f;
-    float Offset_DayStart = 0.7f;
+    [SerializeField] float SkyScrollSpeed = 5f;
+    //float Offset_DayStart = 0.7f; // todo : 황혼시작으로 해보자
+    float Offset_DayStart = 0.97f; 
+
     Renderer SkyRend;
     [SerializeField] float offset=0;
 
@@ -73,8 +75,10 @@ public class GameManager : MonoBehaviour
 
         cameraRunningModePos = mainCamera.transform.position;
         cameraRunningModeAngle = mainCamera.transform.rotation.eulerAngles;
-        ChangeStateToDay(); //처음 낮으로 게임 시작
+        //ChangeStateToDay(); //처음 낮으로 게임 시작
+        ChangeState_ToTwilight();//todo : 처음 새벽으로 시작 
         TimeRunning = true;
+        offset = 0;
 
     }
    
@@ -84,7 +88,8 @@ public class GameManager : MonoBehaviour
         {
             //todo : 시간이 흐를 때 안 흐를떄를 제어하는 변수하나 만들어서 안흐를 때는 offset이 증가하지 않도록 해도 될것 같음
             //todo : 이거 계속 안되는데 그냥 넘길때는 아예 옵셋을 지정해버려야하나 
-            offset = (Time.time * SkyScrollSpeed) % 1f;
+            offset += Time.deltaTime * SkyScrollSpeed;
+            if (offset > 1) offset = 0;
             SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
             if (offset <= 0.45f)
@@ -174,7 +179,16 @@ public class GameManager : MonoBehaviour
         currentMonster.gameObject.SetActive(false);// 몬스터 씬에서 없애고
         playerController.Victory(); // 플레이어가 뒤돌며 승리 모션
         TimeRunning = false; //잠시 게임 정지
-        UIManager.instance.ShowVictoryUI(); // todo : 보상선택 - 잠깐 타임 스케일 0
+        UIManager.instance.ShowVictoryUI();
+        yield return null;
+    }
+
+    //새벽까지 시간 이동
+    public IEnumerator TimeJumpToTwilight()
+    {
+        float speed = 0.04f;
+        float offset = (Time.time * speed) % 1f;
+        SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
         yield return null;
     }
 
@@ -199,7 +213,8 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //todo : 에너지가 부족한경우 
+    //todo : 에너지가 부족한경우
+    //todo : 이펙트 추가하기 
     IEnumerator UseEnergy()
     {
         float timer = 0.1f; //0,1초마다 닳음
@@ -221,15 +236,8 @@ public class GameManager : MonoBehaviour
 
 
 
-    void CloseVictoryUI()
-    {
-        UIManager.instance.Victory_UI.GetComponent<VictoryUI>().SetCloseTrigger();
-    }
-
-
-
     /// <summary>
-    /// 1초동안 카메라를 공겨 모드 위치로 이동 
+    /// duration초동안 카메라를 공겨 모드 위치로 이동 
     /// </summary>
     /// <returns></returns>
     IEnumerator CameraMove(Vector3 pos,Vector3 rotate)
