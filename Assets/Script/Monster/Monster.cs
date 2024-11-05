@@ -24,7 +24,7 @@ public class Monster : MonoBehaviour
 
     private void OnEnable()
     {
-        Hp = GameManager.instance.stage * 450; // 스테이지 마다 n배로 체력 증가  
+        Hp = GameManager.instance.stage * 500 ; // 스테이지 마다 n배로 체력 증가  
         damage = PlayerInfo.instance.attackCnt;//플레이어 인포에서 데미지를 가져옴 
         transform.position = new Vector3(0, 20f, -62); //소환!
         GameManager.instance.currentMonster = this; // 현재 스테이지 몬스터로 지정 
@@ -69,7 +69,6 @@ public class Monster : MonoBehaviour
         Debug.Log("몬스터 죽음!");
         animator.SetTrigger("Death"); // 몬스터 죽는 애니메이션 실행
         isAlive = false;
-        GameManager.instance.TimeRunning = false; //잠시 게임 정지
         StartCoroutine(GameManager.instance.VictoryRoutine());
     }
 }

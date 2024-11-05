@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour
     [Header("TimeState Control")]
     public bool TimeRunning = true;
     public State GameState = State.Day;
-    [SerializeField] float SkyScrollSpeed = 0.03f;
+    public float SkyScrollSpeed = 0.02f;
     float Offset_DayStart = 0.7f; 
 
     Renderer SkyRend;
@@ -88,19 +89,19 @@ public class GameManager : MonoBehaviour
             if (offset > 1) offset = 0;
             SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
 
-            if (offset <= 0.45f)
+            if (offset <= 0.48f)
             {
                 //Debug.Log("낮 " + offset);
                 if (GameState != State.Day) ChangeStateToDay();
 
             }
-            else if (offset <= 0.5)
+            else if (offset <= 0.53)
             {
                 //Debug.Log("저녁 " + offset);
                 if (GameState != State.SunSet) ChangeState_ToSunSet();
 
             }
-            else if (offset <= 0.9)
+            else if (offset <= 0.99)
             {
                 //Debug.Log("밤 " + offset);
                 if (GameState != State.Night) ChangeStateToNight();
@@ -169,6 +170,7 @@ public class GameManager : MonoBehaviour
     //몬스터 스크립트에서 몬스터가 죽으면 실행됨 
     public IEnumerator VictoryRoutine()
     {
+        TimeRunning = false; //잠시 게임 정지
         SoundManager.instance.PlayVictoryBGM();
         UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
         currentMonster.gameObject.SetActive(false);// 몬스터 씬에서 없애고
@@ -177,22 +179,11 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
-    /// <summary>
-    /// 새벽까지 빠르게 타임 이동 
-    /// </summary>
-    public void TimeJumptoTwilight()
-    {
-        while(GameState != State.Twilight)
-        {
-            SkyScrollSpeed = 0.08f;
-        }
-        SkyScrollSpeed = 0.03f;
-    }
-
     void ChangeState_ToTwilight()
     {
         Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
+        SkyScrollSpeed = 0.02f; //Todo : 확인 
 
         //몹을 죽였는지 확인
         if (currentMonster.isAlive)
@@ -235,9 +226,6 @@ public class GameManager : MonoBehaviour
         {
             GameOver(); //에너지를 다 썼는데도 죽이지 못했다면 게임 오버
         }
-        else{
-            TimeRunning = true;//시간 다시 ㄱㄱ 
-        }
         yield return null;
     }
 
@@ -274,5 +262,10 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.PlayGameOverSound();
         UIManager.instance.GameOverUI.SetActive(true);
 
+    }
+
+    public void GameRestart()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
