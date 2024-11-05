@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
     void ChangeStateToDay()
     {
         Debug.Log("낮이 되었습니다~"+ offset);
+        SoundManager.instance.PlayDayBGM();
         GameState = State.Day;
         stage++;
 
@@ -128,7 +129,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    // todo : 몹 나온다고 경고 
+    
     /// <summary>
     /// 저녁 : 아이템 스폰이 멈춤 
     /// </summary>
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour
         GameState = State.SunSet;
         MapManager.instance.Stop_ItemSpawnRepeatedly();
         UIManager.instance.WarningUI.SetActive(true);
+        SoundManager.instance.PlayBattleBGM();//배틀브금 시작  // todo : 아니 여기서 왤케 렉이 걸리지? 
     }
 
 
@@ -153,6 +155,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.WarningUI.SetActive(false);
 
         //ReadyToFight
+        
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
         playerController.StopRunning(); // 플레이어가 달리기를 멈추고 전투준비
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
@@ -166,8 +169,7 @@ public class GameManager : MonoBehaviour
     //몬스터 스크립트에서 몬스터가 죽으면 실행됨 
     public IEnumerator VictoryRoutine()
     {
-        TimeRunning = false; //잠시 게임 정지
-
+        SoundManager.instance.PlayVictoryBGM();
         UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
         currentMonster.gameObject.SetActive(false);// 몬스터 씬에서 없애고
         playerController.Victory(); // 플레이어가 뒤돌며 승리 모션
@@ -269,6 +271,7 @@ public class GameManager : MonoBehaviour
     {
         //게임오버
         Debug.Log("GameOver");
+        SoundManager.instance.PlayGameOverSound();
         UIManager.instance.GameOverUI.SetActive(true);
 
     }
