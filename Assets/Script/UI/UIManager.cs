@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public GameObject WarningUI;//인스펙터에서 할당 
     public GameObject MonsterHP_UI; //인스펙터에서 할당 
     public TextMeshProUGUI MonsterHP_text; //인스펙터에서 할당
     public GameObject Victory_UI; //인스펙터에서 할당
@@ -88,11 +89,6 @@ public class UIManager : MonoBehaviour
     public void CloseVictoryUI()
     {
         Victory_UI.SetActive(false);
-        
-        // TODO : 증강선택 후에도 아직 밤이 끝나지 않았다면 새벽으로 바로 넘어감
-        // TODO : 아예 게임 시작을 새벽으로 해서 거기로 초기화 시키도록 할까?
-
-
         GameManager.instance.TimeRunning = true; 
     }
 

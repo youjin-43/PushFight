@@ -49,9 +49,8 @@ public class GameManager : MonoBehaviour
     [Header("TimeState Control")]
     public bool TimeRunning = true;
     public State GameState = State.Day;
-    [SerializeField] float SkyScrollSpeed = 5f;
-    //float Offset_DayStart = 0.7f; // todo : 황혼시작으로 해보자
-    float Offset_DayStart = 0.97f; 
+    [SerializeField] float SkyScrollSpeed = 0.03f;
+    float Offset_DayStart = 0.7f; 
 
     Renderer SkyRend;
     [SerializeField] float offset=0;
@@ -71,12 +70,11 @@ public class GameManager : MonoBehaviour
         SkyRend = GameObject.Find("SkyDome").GetComponent<Renderer>();
 
         MapManager.instance.GenTiles();// 맵 생성 
-        MapManager.instance.GenEnergy(); // 에너지 맵에 배치
+        //MapManager.instance.GenEnergy(); // 에너지 맵에 배치 //todo : 이거 안해도 될것 같아 
 
         cameraRunningModePos = mainCamera.transform.position;
         cameraRunningModeAngle = mainCamera.transform.rotation.eulerAngles;
-        //ChangeStateToDay(); //처음 낮으로 게임 시작
-        ChangeState_ToTwilight();//todo : 처음 새벽으로 시작 
+        ChangeStateToDay(); //처음 낮으로 게임 시작
         TimeRunning = true;
         offset = 0;
 
@@ -86,8 +84,6 @@ public class GameManager : MonoBehaviour
     {
         if (TimeRunning)
         {
-            //todo : 시간이 흐를 때 안 흐를떄를 제어하는 변수하나 만들어서 안흐를 때는 offset이 증가하지 않도록 해도 될것 같음
-            //todo : 이거 계속 안되는데 그냥 넘길때는 아예 옵셋을 지정해버려야하나 
             offset += Time.deltaTime * SkyScrollSpeed;
             if (offset > 1) offset = 0;
             SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
@@ -95,29 +91,23 @@ public class GameManager : MonoBehaviour
             if (offset <= 0.45f)
             {
                 //Debug.Log("낮 " + offset);
-                //낮 
                 if (GameState != State.Day) ChangeStateToDay();
 
             }
             else if (offset <= 0.5)
             {
                 //Debug.Log("저녁 " + offset);
-                // 저녁
                 if (GameState != State.SunSet) ChangeState_ToSunSet();
 
             }
             else if (offset <= 0.9)
             {
                 //Debug.Log("밤 " + offset);
-                // 밤 
                 if (GameState != State.Night) ChangeStateToNight();
-
-                //todo : 밤이 끝나기 전에 일찍 몹을 죽인경우 새벽으로 빠르게 타임 워프 해야함 
             }
             else
             {
                 //Debug.Log("황혼 " + offset);
-                //황혼 
                 if (GameState != State.Twilight) ChangeState_ToTwilight();
             }
         }
@@ -133,11 +123,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CameraMove(cameraRunningModePos, cameraRunningModeAngle)); //카메라 포지션, 각도 정상화 
         MapManager.instance.Start_ItemSpawnRepeatedly();
         MapManager.instance.Start_TileScrolling();
-        playerController.StartRunninng();// 플레이어 다시 달리기 시작
-
+        playerController.StartRunninng();// 플레이어 달리기 시작
     }
 
 
+
+    // todo : 몹 나온다고 경고 
     /// <summary>
     /// 저녁 : 아이템 스폰이 멈춤 
     /// </summary>
@@ -146,7 +137,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("저녁이 되었습니다~"+offset);
         GameState = State.SunSet;
         MapManager.instance.Stop_ItemSpawnRepeatedly();
-
+        UIManager.instance.WarningUI.SetActive(true);
     }
 
 
@@ -159,6 +150,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("밤이 되었습니다~"+ offset);
         GameState = State.Night;
+        UIManager.instance.WarningUI.SetActive(false);
 
         //ReadyToFight
         MapManager.instance.Stop_TileScrolling(); // 타일 스크롤링이 멈추고
@@ -166,7 +158,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CameraMove(cameraAttackModePos,cameraAttackModeAngle)); // 전투모드로 카메라 위치 이동
         MapManager.instance.Monsters.transform.GetChild(0).gameObject.SetActive(true); // 몬스터 등장
         UIManager.instance.MonsterHP_text.text = currentMonster.Hp.ToString(); // HP text 셋팅
-
         playerController.Aim(); // 캐릭터가 조준
     }
 
@@ -175,35 +166,37 @@ public class GameManager : MonoBehaviour
     //몬스터 스크립트에서 몬스터가 죽으면 실행됨 
     public IEnumerator VictoryRoutine()
     {
+        TimeRunning = false; //잠시 게임 정지
+
         UIManager.instance.MonsterHP_UI.SetActive(false); //HP UI 끄기 
         currentMonster.gameObject.SetActive(false);// 몬스터 씬에서 없애고
         playerController.Victory(); // 플레이어가 뒤돌며 승리 모션
-        TimeRunning = false; //잠시 게임 정지
         UIManager.instance.ShowVictoryUI();
         yield return null;
     }
 
-    //새벽까지 시간 이동
-    public IEnumerator TimeJumpToTwilight()
+    /// <summary>
+    /// 새벽까지 빠르게 타임 이동 
+    /// </summary>
+    public void TimeJumptoTwilight()
     {
-        float speed = 0.04f;
-        float offset = (Time.time * speed) % 1f;
-        SkyRend.material.mainTextureOffset = new Vector2(Offset_DayStart + offset, 0);
-        yield return null;
+        while(GameState != State.Twilight)
+        {
+            SkyScrollSpeed = 0.08f;
+        }
+        SkyScrollSpeed = 0.03f;
     }
 
     void ChangeState_ToTwilight()
     {
         Debug.Log("새벽이 되었습니다~" + offset);
         GameState = State.Twilight;
-        //if (SkyScrollSpeed != 0.02) SkyScrollSpeed /= 2;//몹 죽였을때 빨라지게 했던 스크롤 스피드 정상화 
 
         //몹을 죽였는지 확인
         if (currentMonster.isAlive)
         {
             //몹을 죽이지 못한경우 
             StartCoroutine("UseEnergy"); //남은 몹 채력 만큼 에너지 소비
-            if (currentMonster.isAlive) GameOver(); //에너지를 다 썼는데도 죽이지 못했다면 게임 오버
         }
         else
         {
@@ -213,14 +206,19 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //todo : 에너지가 부족한경우
+    
     //todo : 이펙트 추가하기 
     IEnumerator UseEnergy()
     {
+
+        TimeRunning = false;//시간 잠시 멈춤 
+
         float timer = 0.1f; //0,1초마다 닳음
         float delta = 0;
-        while (currentMonster.Hp > 0)
+
+        while (currentMonster.isAlive && PlayerInfo.instance.energeCnt>0) 
         {
+
             delta += Time.deltaTime;
             if(delta> timer)
             {
@@ -231,6 +229,13 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+        if (currentMonster.isAlive)
+        {
+            GameOver(); //에너지를 다 썼는데도 죽이지 못했다면 게임 오버
+        }
+        else{
+            TimeRunning = true;//시간 다시 ㄱㄱ 
+        }
         yield return null;
     }
 
@@ -259,7 +264,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    // TODO : 게임 오버 구현 
+    // TODO : 게임 오버 -> 엎어져있는 캐릭터를 넣자! 
     void GameOver()
     {
         //게임오버

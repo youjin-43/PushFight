@@ -10,7 +10,7 @@ public class Arrow : MonoBehaviour
 
 
         //TODO : 이거 위치 확인해야함 
-        //if (transform.position.z < -30) gameObject.SetActive(false);
+        if (transform.position.z < -300) gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)
     {

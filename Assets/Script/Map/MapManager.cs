@@ -45,7 +45,6 @@ public class MapManager : MonoBehaviour
     {
         GroundTiles = new GameObject[tileCnt];
         for (int i = 0; i < tileCnt; i++) GroundTiles[i] = Instantiate(GroundTilesPrefab[i % 3], new Vector3(0, 0, -100 * i), Quaternion.identity);
-
     }
 
     #region 아이템 스폰 관련 변수들
@@ -58,8 +57,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] public float spawnPosZ = -165; //직접 지정 해줘야함 
 
 
-
-    // todo : 아이템 초반에만 중복 생성되는거 해결해야함 
     [Header("Spawn - Energy")]
     public float startSpawnRate = 10f;
     float startPoint = -50f;
@@ -76,7 +73,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region 몬스터 관련
-    //TODO : 나중에 보스도 추가
+    //TODO : 몬스터 추가 추가
     [Space(10f)]
     [Header("Monster")]
     public GameObject Monsters;

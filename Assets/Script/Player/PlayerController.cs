@@ -30,16 +30,16 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(GameManager.instance.GameState != GameManager.State.Night)
+            if(GameManager.instance.GameState == GameManager.State.Day)
             {
                 //밤이 아닐때는 점프
                 currentJumpCnt++;
                 Jump();
 
             }
-            else
+            else if(GameManager.instance.GameState == GameManager.State.Night && GameManager.instance.currentMonster.isAlive)
             {
-                //밤에는 공격
+                //밤에는 공격 -> 몬스터가 살아있을때만 공격 
                 Attack();
             }
         }   
