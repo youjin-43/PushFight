@@ -23991,7 +23991,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6840815821115851381}
   - component: {fileID: 2388227545182528149}
-  - component: {fileID: 4070576202664741863}
   m_Layer: 0
   m_Name: GroundTile2
   m_TagString: Ground
@@ -24271,27 +24270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0123d25d53a46427f8cb9210ef35ba8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &4070576202664741863
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8558530507352790216}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 26.090816, y: 4.148454, z: 101.543655}
-  m_Center: {x: -2.4101753, y: 1.5742271, z: -33.482903}
 --- !u!1 &8566232290747253489
 GameObject:
   m_ObjectHideFlags: 0
