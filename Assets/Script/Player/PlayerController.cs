@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
             }   
             else //2단 이상 
             {
+                GetComponent<Rigidbody>().linearVelocity=new Vector3(0, 0,0);
+
                 GetComponent<Rigidbody>().AddForce(Vector3.up * DjumpPower, ForceMode.Impulse);
                 animator.SetTrigger("DJump");
             }
