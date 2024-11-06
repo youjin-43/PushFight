@@ -38,7 +38,7 @@ public class SoundManager : MonoBehaviour
     [Header("Player")]
     public AudioClip Jump;
     public AudioClip Attak;
-
+    public AudioClip Energy;
 
     AudioSource audioSource;
     private void Start()
@@ -49,6 +49,12 @@ public class SoundManager : MonoBehaviour
     public void PlayJumpSound()
     {
         audioSource.PlayOneShot(Jump);
+    }
+
+
+    public void PlayGetItemSound()
+    {
+        audioSource.PlayOneShot(Energy);
     }
 
 

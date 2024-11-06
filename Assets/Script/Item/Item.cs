@@ -38,7 +38,8 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            gameObject.SetActive(false); //비활성화 
+            gameObject.SetActive(false); //비활성화
+            SoundManager.instance.PlayGetItemSound();
 
             switch (type)
             {

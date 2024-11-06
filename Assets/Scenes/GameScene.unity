@@ -2566,6 +2566,7 @@ MonoBehaviour:
   GameOver_Sound: {fileID: 8300000, guid: 11e6c4bb33c284464a3c38fb6d399fbe, type: 3}
   Jump: {fileID: 8300000, guid: 47dda85d651ff4e83a83d6ce778d45be, type: 3}
   Attak: {fileID: 0}
+  Energy: {fileID: 8300000, guid: ba590077619fb4eebb78f3442be92a12, type: 3}
 --- !u!1001 &761061875
 PrefabInstance:
   m_ObjectHideFlags: 0
